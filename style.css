@@ -23,10 +23,20 @@ html {
   --color-blue: #466BFF;
 }
 
+#app {
+  background-color: var(--color-black);
+}
+
 .grid {
+  height: 100vh;
   display: grid;
-  gap: 1rem;
+  grid-gap: 4px;
   grid-template-columns: repeat(6, 1fr);
+}
+
+.grid-column {
+  padding: 1rem;
+  background-color: var(--color-white);
 }
 
 .square {
