@@ -1,6 +1,8 @@
-import './style.css'
-import './reset.css'
+import './reset.css';
+import './style.css';
 
+const speed = 10
+const totalJumps = 180
 const songs = [
   { name: `Take On Me`, band: `a-ha`, src: `./public/songs/takeonme.mp3`, bpm: 84 },
   { name: `Hold the Line`, band: `TOTO`, src: ``, bpm: 97 },
@@ -19,27 +21,29 @@ const songs = [
   { name: `You're The One That I Want`, band: `John Travolta, Olivia Newton-John`, src: ``, bpm: 107 },
   { name: `Serotonin`, band: `Tom Walker`, src: ``, bpm: 164 }]
 
-const totalJumps = 180
-
 document.querySelector('#app').innerHTML = `
   <div class="grid">
-    <div class="grid-column">
+    <div class="grid-column" id="column1">
       <div class="square" id="square1"></div>
     </div>
-    <div class="grid-column">
+    <div class="grid-column" id="column2">
       <div class="square" id="square2"></div>
     </div>
-    <div class="grid-column">
+    <div class="grid-column" id="column3">
       <div class="square" id="square3"></div>
     </div>
-    <div class="grid-column">
+    <div class="grid-column" id="column4">
       <div class="square" id="square4"></div>
     </div>
-    <div class="grid-column">
+    <div class="grid-column" id="column5">
       <div class="square" id="square5"></div>
     </div>
-    <div class="grid-column">
+    <div class="grid-column" id="column6">
       <div class="square" id="square6"></div>
     </div>
   </div>
 `
+const column1 = document.querySelector(`.grid-column#column1`)
+const note = document.createElement(`div`)
+note.classList.add(`note`)
+column1.appendChild(note);

@@ -35,14 +35,21 @@ html {
 }
 
 .grid-column {
-  padding: 1rem;
+  padding: .75rem;
   background-color: var(--color-white);
 }
 
 .square {
   width: 100%;
-  height: 15vh;
+  height: 18vh;
   border-radius: 20px;
+}
+
+.note {
+  width: 100%;
+  height: 18vh;
+  border-radius: 20px;
+  background-color: var(--color-black);
 }
 
 #square1 {
