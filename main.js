@@ -1,8 +1,26 @@
 import './reset.css';
 import './style.css';
 
+document.querySelector('#app').innerHTML = `
+  <div class="game-instructions hidden">
+    <h1>Press the button when a note reaches it!!</h1>
+    <button class="button-start">Start game</button>
+  </div>
+  <canvas class="" id="canvas"></canvas>
+`
+const canvas = document.querySelector('#canvas')
+const ctx = canvas.getContext('2d')
+const buttonStart = document.querySelector('.button-start')
+const gameInstructions = document.querySelector('.game-instructions')
+
 const speed = 10
+const columns = 6
 const totalJumps = 180
+
+let columnWidth;
+
+const colours = ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3']
+
 const songs = [
   { name: `Take On Me`, band: `a-ha`, src: `./public/songs/takeonme.mp3`, bpm: 84 },
   { name: `Hold the Line`, band: `TOTO`, src: ``, bpm: 97 },
@@ -21,29 +39,35 @@ const songs = [
   { name: `You're The One That I Want`, band: `John Travolta, Olivia Newton-John`, src: ``, bpm: 107 },
   { name: `Serotonin`, band: `Tom Walker`, src: ``, bpm: 164 }]
 
-document.querySelector('#app').innerHTML = `
-  <div class="grid">
-    <div class="grid-column" id="column1">
-      <div class="square" id="square1"></div>
-    </div>
-    <div class="grid-column" id="column2">
-      <div class="square" id="square2"></div>
-    </div>
-    <div class="grid-column" id="column3">
-      <div class="square" id="square3"></div>
-    </div>
-    <div class="grid-column" id="column4">
-      <div class="square" id="square4"></div>
-    </div>
-    <div class="grid-column" id="column5">
-      <div class="square" id="square5"></div>
-    </div>
-    <div class="grid-column" id="column6">
-      <div class="square" id="square6"></div>
-    </div>
-  </div>
-`
-const column1 = document.querySelector(`.grid-column#column1`)
-const note = document.createElement(`div`)
-note.classList.add(`note`)
-column1.appendChild(note);
+const handleResize = () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  columnWidth = Math.round(canvas.width / columns);
+  gameSetup()
+};
+
+buttonStart.addEventListener('click', () => {
+  // gameInstructions.classList.add('hidden')
+  canvas.classList.remove('hidden')
+})
+
+const gameSetup = () => {
+  ctx.beginPath();
+  for (let i = 1; i < columns; i++) {
+    ctx.beginPath();
+    ctx.moveTo(columnWidth * i, 0);
+    ctx.lineTo(columnWidth * i, canvas.height);
+    ctx.closePath();
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
+
+  for (let i = 0; i < columns; i++) {
+    ctx.fillStyle = colours[i];
+    ctx.beginPath();
+    ctx.roundRect((columnWidth * i) + 15, canvas.height - 200, columnWidth - 30, 185, [10]);
+    ctx.fill();
+  }
+}
+handleResize();
+window.addEventListener('resize', handleResize);
