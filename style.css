@@ -23,10 +23,37 @@ html {
   --color-blue: #466BFF;
 }
 
-#canvas {
+h1 {
+  font-size: 3rem;
+  font-weight: 600;
+}
+
+button {
+  background-color: var(--color-black);
+  padding: 1rem 3rem;
+  margin: 2rem;
+  border: none;
+  border-radius: 10px;
+  color: var(--color-white);
+}
+
+.canvas {
+  position: absolute;
+  top:0;
+  left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: var(--color-lightblue);
+  z-index: 1;
+}
+
+.timer {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 2;
+  font-size: 4rem;
+  font-weight: 600;
+  color: var(--color-black);
 }
 
 .game-instructions {

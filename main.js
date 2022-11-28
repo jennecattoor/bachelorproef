@@ -2,35 +2,45 @@ import './reset.css';
 import './style.css';
 
 document.querySelector('#app').innerHTML = `
-  <div class="game-instructions hidden">
-    <h1>Press the button when a note reaches it!!</h1>
+  <h2 class="timer hidden">2:00</h2>
+  <div class="game-instructions">
+    <h1 class="text">Press the button when a note reaches it!</h1>
     <button class="button-start">Start game</button>
   </div>
-  <canvas class="" id="canvas"></canvas>
+  <canvas class="canvas hidden" id="canvasNotes"></canvas>
+  <canvas class="canvas hidden" id="canvasBackground"></canvas>
+  <audio muted autoplay src="" class="audio" type="audio/mp3"></audio>
 `
-const canvas = document.querySelector('#canvas')
-const ctx = canvas.getContext('2d')
+const canvasBackground = document.querySelector('#canvasBackground');
+const ctxBackground = canvasBackground.getContext('2d')
+const canvasNotes = document.querySelector('#canvasNotes');
+const ctxNotes = canvasNotes.getContext('2d')
+const timer = document.querySelector('.timer')
 const buttonStart = document.querySelector('.button-start')
 const gameInstructions = document.querySelector('.game-instructions')
+const text = document.querySelector('.text')
+const audio = document.querySelector('.audio');
 
-const speed = 10
-const columns = 6
-const totalJumps = 180
+const speed = 3;
+const columns = 6;
+const currentSong = 0;
+const totalTime = 120;
+const totalJumps = 100;
 
 let columnWidth;
+let amountOfJumps = 0;
 
 const colours = ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3']
 
 const songs = [
-  { name: `Take On Me`, band: `a-ha`, src: `./public/songs/takeonme.mp3`, bpm: 84 },
-  { name: `Hold the Line`, band: `TOTO`, src: ``, bpm: 97 },
-  { name: `Your Love`, band: `The Outfield`, src: ``, bpm: 130 },
-  { name: `I'm Still Standing`, band: `The Outfield`, src: ``, bpm: 88 },
-  { name: `Midnight City`, band: `M83`, src: ``, bpm: 105 },
-  { name: `Dancing Queen`, band: `ABBA`, src: ``, bpm: 101 },
-  { name: `I Wanne Dance with Somebody`, band: `Whitney Houston`, src: ``, bpm: 119 },
-  { name: `Got My Mind Set On You`, band: `George Harrison`, src: ``, bpm: 149 },
-  { name: `I'm Gonne Be`, band: `The Proclaimers`, src: ``, bpm: 118 },
+  { name: `Take On Me`, band: `a-ha`, src: `./songs/takeonme.mp3`, bpm: 84 },
+  { name: `Hold the Line`, band: `TOTO`, src: `./songs/holdtheline.mp3`, bpm: 97 },
+  { name: `Your Love`, band: `The Outfield`, src: `./songs/yourlove.mp3`, bpm: 130 },
+  { name: `I'm Still Standing`, band: `Elton John`, src: `./songs/imstillstanding.mp3`, bpm: 88 },
+  { name: `Dancing Queen`, band: `ABBA`, src: `./songs/dancingqueen.mp3`, bpm: 101 },
+  { name: `I Wanne Dance with Somebody`, band: `Whitney Houston`, src: `./songs/iwannedance.mp3`, bpm: 119 },
+  { name: `Got My Mind Set On You`, band: `George Harrison`, src: `./songs/gotmymind.mp3`, bpm: 149 },
+  { name: `I'm Gonne Be`, band: `The Proclaimers`, src: `./songs/imgonnebe.mp3`, bpm: 118 },
   { name: `September`, band: `Earth, Wind & Fire`, src: ``, bpm: 126 },
   { name: `I Want You Back`, band: `The Jackson 5`, src: ``, bpm: 98 },
   { name: `Help!`, band: `The Beatles`, src: ``, bpm: 95 },
@@ -40,34 +50,97 @@ const songs = [
   { name: `Serotonin`, band: `Tom Walker`, src: ``, bpm: 164 }]
 
 const handleResize = () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  columnWidth = Math.round(canvas.width / columns);
-  gameSetup()
+  canvasBackground.width = window.innerWidth;
+  canvasBackground.height = window.innerHeight;
+  canvasNotes.width = window.innerWidth;
+  canvasNotes.height = window.innerHeight;
+  columnWidth = Math.round(canvasBackground.width / columns);
+  gameBackground()
 };
 
 buttonStart.addEventListener('click', () => {
-  // gameInstructions.classList.add('hidden')
-  canvas.classList.remove('hidden')
+  gameInstructions.classList.add('hidden')
+  canvasBackground.classList.remove('hidden')
+  canvasNotes.classList.remove('hidden')
+  startGame()
 })
 
-const gameSetup = () => {
-  ctx.beginPath();
+const gameBackground = () => {
+  ctxBackground.beginPath();
   for (let i = 1; i < columns; i++) {
-    ctx.beginPath();
-    ctx.moveTo(columnWidth * i, 0);
-    ctx.lineTo(columnWidth * i, canvas.height);
-    ctx.closePath();
-    ctx.lineWidth = 2;
-    ctx.stroke();
+    ctxBackground.beginPath();
+    ctxBackground.moveTo(columnWidth * i, 0);
+    ctxBackground.lineTo(columnWidth * i, canvasBackground.height);
+    ctxBackground.closePath();
+    ctxBackground.lineWidth = 2;
+    ctxBackground.stroke();
   }
 
   for (let i = 0; i < columns; i++) {
-    ctx.fillStyle = colours[i];
-    ctx.beginPath();
-    ctx.roundRect((columnWidth * i) + 15, canvas.height - 200, columnWidth - 30, 185, [10]);
-    ctx.fill();
+    ctxBackground.fillStyle = colours[i];
+    ctxBackground.shadowColor = '#282828';
+    ctxBackground.shadowBlur = 8;
+    ctxBackground.beginPath();
+    ctxBackground.roundRect((columnWidth * i) + 15, canvasBackground.height - 200, columnWidth - 30, 185, [10]);
+    ctxBackground.closePath();
+    ctxBackground.fill();
+
   }
 }
+
+const startTimer = () => {
+  timer.classList.remove('hidden');
+  timer.innerHTML = 1 + ':' + 59;
+}
+
+const startGame = () => {
+  audio.src = songs[currentSong].src;
+  startTimer()
+
+  const jumpFrequency = Math.round((totalTime / totalJumps) * 1000);
+  console.log(jumpFrequency)
+
+  const countNotes = setInterval(function () {
+    if (amountOfJumps <= totalJumps) {
+      amountOfJumps++;
+      console.log(amountOfJumps)
+      spawnNote()
+    }
+    else {
+      clearInterval(countNotes);
+      setTimeout(() => { endGame() }, 8000)
+    }
+  }, jumpFrequency);
+}
+
+const spawnNote = () => {
+  let yPosition = -100;
+  const randomColumn = Math.floor(Math.random() * columns);
+
+  const drawNote = () => {
+    ctxNotes.clearRect((columnWidth * randomColumn) + 15, (yPosition * speed) - 3, columnWidth, 10)
+    ctxNotes.beginPath()
+    ctxNotes.roundRect((columnWidth * randomColumn) + 15, yPosition * speed, columnWidth - 30, 185, [10]);
+    ctxNotes.fillStyle = '#282828';
+    ctxNotes.fill();
+    ctxNotes.closePath();
+    yPosition++
+    if ((yPosition * speed) <= canvasNotes.height) {
+      requestAnimationFrame(drawNote);
+    }
+  }
+
+  drawNote()
+}
+
+const endGame = () => {
+  gameInstructions.classList.remove('hidden')
+  canvasBackground.classList.add('hidden')
+  canvasNotes.classList.add('hidden')
+  timer.classList.add('hidden');
+  text.innerHTML = `You scored ${amountOfJumps} points!`
+  currentSong++;
+}
+
 handleResize();
 window.addEventListener('resize', handleResize);
