@@ -2,14 +2,14 @@ import './reset.css';
 import './style.css';
 
 document.querySelector('#app').innerHTML = `
-  <h2 class="timer hidden">2:00</h2>
+  <h2 class="timer hidden">02:00</h2>
   <div class="game-instructions">
     <h1 class="text">Press the button when a note reaches it!</h1>
     <button class="button-start">Start game</button>
   </div>
   <canvas class="canvas hidden" id="canvasNotes"></canvas>
   <canvas class="canvas hidden" id="canvasBackground"></canvas>
-  <audio muted autoplay src="" class="audio" type="audio/mp3"></audio>
+  <audio autoplay src="" class="audio" type="audio/mp3"></audio>
 `
 const canvasBackground = document.querySelector('#canvasBackground');
 const ctxBackground = canvasBackground.getContext('2d')
@@ -59,10 +59,10 @@ const handleResize = () => {
 };
 
 buttonStart.addEventListener('click', () => {
-  gameInstructions.classList.add('hidden')
-  canvasBackground.classList.remove('hidden')
-  canvasNotes.classList.remove('hidden')
-  startGame()
+  gameInstructions.classList.add('hidden');
+  canvasBackground.classList.remove('hidden');
+  canvasNotes.classList.remove('hidden');
+  startGame();
 })
 
 const gameBackground = () => {
@@ -88,22 +88,38 @@ const gameBackground = () => {
   }
 }
 
-const startTimer = () => {
-  timer.classList.remove('hidden');
-  timer.innerHTML = 1 + ':' + 59;
+const startTimer = (duration, display) => {
+  var timer = duration, minutes, seconds;
+
+  const timerCountdown = () => {
+    minutes = parseInt(timer / 60, 10);
+    seconds = parseInt(timer % 60, 10);
+
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    seconds = seconds < 10 ? "0" + seconds : seconds;
+
+    display.textContent = minutes + ":" + seconds;
+
+    if (--timer < 0) {
+      timer = 0
+      clearInterval(timerCountdown)
+    }
+  }
+
+  setInterval(timerCountdown, 1000);
 }
 
 const startGame = () => {
+  timer.classList.remove('hidden');
+  startTimer(totalTime, timer);
+
   audio.src = songs[currentSong].src;
-  startTimer()
 
   const jumpFrequency = Math.round((totalTime / totalJumps) * 1000);
-  console.log(jumpFrequency)
 
   const countNotes = setInterval(function () {
     if (amountOfJumps <= totalJumps) {
       amountOfJumps++;
-      console.log(amountOfJumps)
       spawnNote()
     }
     else {
@@ -137,6 +153,7 @@ const endGame = () => {
   gameInstructions.classList.remove('hidden')
   canvasBackground.classList.add('hidden')
   canvasNotes.classList.add('hidden')
+  ctxNotes.clearRect(0, 0, canvasNotes.width, canvasNotes.height)
   timer.classList.add('hidden');
   text.innerHTML = `You scored ${amountOfJumps} points!`
   currentSong++;
