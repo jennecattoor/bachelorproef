@@ -49,14 +49,21 @@ button {
   z-index: 1;
 }
 
-.timer {
+h2 {
   position: absolute;
   top: 1rem;
-  right: 1rem;
   z-index: 2;
   font-size: 4rem;
   font-weight: 600;
   color: var(--color-black);
+}
+
+.timer {
+  right: 1rem;
+}
+
+.points {
+  left: 1rem;
 }
 
 .game-instructions {

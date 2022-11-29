@@ -3,6 +3,7 @@ import './style.css';
 
 document.querySelector('#app').innerHTML = `
   <h2 class="timer hidden">02:00</h2>
+  <h2 class="points hidden">0 Points</h2>
   <div class="game-instructions">
     <h1 class="text">Press the button when a note reaches it!</h1>
     <button class="button-start">Start game</button>
@@ -12,25 +13,30 @@ document.querySelector('#app').innerHTML = `
   <audio autoplay src="" class="audio" type="audio/mp3"></audio>
 `
 const canvasBackground = document.querySelector('#canvasBackground');
-const ctxBackground = canvasBackground.getContext('2d')
+const ctxBackground = canvasBackground.getContext('2d');
 const canvasNotes = document.querySelector('#canvasNotes');
 const ctxNotes = canvasNotes.getContext('2d')
-const timer = document.querySelector('.timer')
-const buttonStart = document.querySelector('.button-start')
-const gameInstructions = document.querySelector('.game-instructions')
-const text = document.querySelector('.text')
+
+const text = document.querySelector('.text');
 const audio = document.querySelector('.audio');
+const timer = document.querySelector('.timer');
+const points = document.querySelector('.points');
+const buttonStart = document.querySelector('.button-start');
+const gameInstructions = document.querySelector('.game-instructions');
+
 
 const speed = 3;
 const columns = 6;
 const totalTime = 120;
-const totalNotes = 100;
+const amountOfNotes = 100;
 
 let columnWidth;
 let currentSong = 0;
-let amountOfJumps = 0;
+let noteCount = 0;
+let pointCount = 0;
+let noteIsTouching = [];
 
-const colours = ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3']
+const colours = ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3'];
 
 const songs = [
   { name: `Take On Me`, band: `a-ha`, src: `./songs/takeonme.mp3`, bpm: 84 },
@@ -47,7 +53,7 @@ const songs = [
   { name: `Don't Stop Me Now`, band: `Queen`, src: ``, bpm: 156 },
   { name: `Great Balls Of Fire`, band: `Jerry Lee Lewis`, src: ``, bpm: 79 },
   { name: `You're The One That I Want`, band: `John Travolta, Olivia Newton-John`, src: ``, bpm: 107 },
-  { name: `Serotonin`, band: `Tom Walker`, src: ``, bpm: 164 }]
+  { name: `Serotonin`, band: `Tom Walker`, src: ``, bpm: 164 }];
 
 const handleResize = () => {
   canvasBackground.width = window.innerWidth;
@@ -55,13 +61,15 @@ const handleResize = () => {
   canvasNotes.width = window.innerWidth;
   canvasNotes.height = window.innerHeight;
   columnWidth = Math.round(canvasBackground.width / columns);
-  gameBackground()
+  gameBackground();
 };
 
 buttonStart.addEventListener('click', () => {
   gameInstructions.classList.add('hidden');
   canvasBackground.classList.remove('hidden');
   canvasNotes.classList.remove('hidden');
+  noteCount = 0;
+  pointCount = 0;
   startGame();
 })
 
@@ -108,22 +116,22 @@ const startTimer = (duration, display) => {
 
 const startGame = () => {
   timer.classList.remove('hidden');
+  points.classList.remove('hidden');
   startTimer(totalTime, timer);
 
   audio.src = songs[currentSong].src;
-
-  const jumpFrequency = Math.round((totalTime / totalNotes) * 1000);
+  const noteFrequency = Math.round((totalTime / (amountOfNotes + 8)) * 1000);
 
   const countNotes = setInterval(function () {
-    if ((amountOfJumps + 10) <= totalNotes) {
-      amountOfJumps++;
+    if (noteCount < amountOfNotes) {
+      noteCount++;
       spawnNote()
     }
     else {
       clearInterval(countNotes);
       setTimeout(() => { endGame() }, 8000)
     }
-  }, jumpFrequency);
+  }, noteFrequency);
 }
 
 const spawnNote = () => {
@@ -137,14 +145,52 @@ const spawnNote = () => {
     ctxNotes.fillStyle = '#282828';
     ctxNotes.fill();
     ctxNotes.closePath();
-    yPosition++
-    if ((yPosition * speed) <= canvasNotes.height) {
+    yPosition++;
+
+    if (yPosition * speed === canvasNotes.height - 300) {
+      noteIsTouching.push(randomColumn);
+    }
+
+    if (yPosition * speed <= canvasNotes.height) {
       requestAnimationFrame(drawNote);
+    }
+    else {
+      noteIsTouching.shift();
     }
   }
 
   drawNote()
 }
+
+const addPoints = () => {
+  pointCount++;
+  points.innerHTML = pointCount + ' Points';
+}
+
+const handleJump = (e) => {
+  noteIsTouching.map(number => { if (number === e) { addPoints() } else { console.log('Bad timing') } })
+}
+
+window.addEventListener('keyup', (e) => {
+  if (e.key === "w") {
+    handleJump(0)
+  }
+  if (e.key === "x") {
+    handleJump(1)
+  }
+  if (e.key === "c") {
+    handleJump(2)
+  }
+  if (e.key === "v") {
+    handleJump(3)
+  }
+  if (e.key === "b") {
+    handleJump(4)
+  }
+  if (e.key === "n") {
+    handleJump(5)
+  }
+})
 
 const endGame = () => {
   gameInstructions.classList.remove('hidden')
@@ -152,7 +198,7 @@ const endGame = () => {
   canvasNotes.classList.add('hidden')
   ctxNotes.clearRect(0, 0, canvasNotes.width, canvasNotes.height)
   timer.classList.add('hidden');
-  text.innerHTML = `You scored ${amountOfJumps} points!`
+  text.innerHTML = `You scored ${pointCount} points!`
 
   if (currentSong <= songs.length) {
     currentSong++;
