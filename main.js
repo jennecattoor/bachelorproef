@@ -5,12 +5,12 @@ document.querySelector('#app').innerHTML = `
   <h2 class="timer hidden">02:00</h2>
   <h2 class="points hidden">0 Points</h2>
   <div class="game-instructions">
-    <h1 class="text">Press the button when a note reaches it!</h1>
+    <h1 class="text">Press the correct key to play game!</h1>
     <button class="button-start">Start game</button>
   </div>
   <canvas class="canvas hidden" id="canvasNotes"></canvas>
   <canvas class="canvas hidden" id="canvasBackground"></canvas>
-  <audio autoplay src="" class="audio" type="audio/mp3"></audio>
+  <audio muted autoplay src="" class="audio" type="audio/mp3"></audio>
 `
 const canvasBackground = document.querySelector('#canvasBackground');
 const ctxBackground = canvasBackground.getContext('2d');
@@ -73,7 +73,8 @@ buttonStart.addEventListener('click', () => {
   startGame();
 })
 
-const gameBackground = () => {
+const gameBackground = (number) => {
+  ctxBackground.clearRect(0, 0, canvasBackground.width, canvasBackground.height);
   ctxBackground.beginPath();
   for (let i = 1; i < columns; i++) {
     ctxBackground.beginPath();
@@ -89,9 +90,17 @@ const gameBackground = () => {
     ctxBackground.shadowColor = '#282828';
     ctxBackground.shadowBlur = 8;
     ctxBackground.beginPath();
-    ctxBackground.roundRect((columnWidth * i) + 15, canvasBackground.height - 200, columnWidth - 30, 185, [10]);
+    if (number === i) {
+      ctxBackground.roundRect((columnWidth * i) + 15, canvasBackground.height - 215, columnWidth - 30, 185, [10]);
+      setTimeout(() => { gameBackground() }, 125);
+    }
+    else {
+      ctxBackground.roundRect((columnWidth * i) + 15, canvasBackground.height - 200, columnWidth - 30, 185, [10]);
+    }
     ctxBackground.closePath();
     ctxBackground.fill();
+    ctxBackground.shadowColor = '';
+    ctxBackground.shadowBlur = 0;
 
   }
 }
@@ -139,15 +148,15 @@ const spawnNote = () => {
   const randomColumn = Math.floor(Math.random() * columns);
 
   const drawNote = () => {
-    ctxNotes.clearRect((columnWidth * randomColumn) + 15, (yPosition * speed) - 3, columnWidth, 10)
-    ctxNotes.beginPath()
+    ctxNotes.clearRect((columnWidth * randomColumn) + 15, (yPosition * speed) - 3, columnWidth, 10);
+    ctxNotes.beginPath();
     ctxNotes.roundRect((columnWidth * randomColumn) + 15, yPosition * speed, columnWidth - 30, 185, [10]);
     ctxNotes.fillStyle = '#282828';
     ctxNotes.fill();
     ctxNotes.closePath();
     yPosition++;
 
-    if (yPosition * speed === canvasNotes.height - 300) {
+    if (yPosition * speed === canvasNotes.height - 330) {
       noteIsTouching.push(randomColumn);
     }
 
@@ -167,28 +176,39 @@ const addPoints = () => {
   points.innerHTML = pointCount + ' Points';
 }
 
-const handleJump = (e) => {
-  noteIsTouching.map(number => { if (number === e) { addPoints() } else { console.log('Bad timing') } })
+const handleJump = (button) => {
+  noteIsTouching.map(number => {
+    if (number === button) {
+      addPoints();
+    }
+  })
 }
 
 window.addEventListener('keyup', (e) => {
+
   if (e.key === "w") {
-    handleJump(0)
+    handleJump(0);
+    gameBackground(0);
   }
   if (e.key === "x") {
-    handleJump(1)
+    handleJump(1);
+    gameBackground(1);
   }
   if (e.key === "c") {
-    handleJump(2)
+    handleJump(2);
+    gameBackground(2);
   }
   if (e.key === "v") {
-    handleJump(3)
+    handleJump(3);
+    gameBackground(3);
   }
   if (e.key === "b") {
-    handleJump(4)
+    handleJump(4);
+    gameBackground(4);
   }
   if (e.key === "n") {
-    handleJump(5)
+    handleJump(5);
+    gameBackground(5);
   }
 })
 
