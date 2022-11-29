@@ -23,11 +23,11 @@ const audio = document.querySelector('.audio');
 
 const speed = 3;
 const columns = 6;
-const currentSong = 0;
 const totalTime = 120;
-const totalJumps = 100;
+const totalNotes = 100;
 
 let columnWidth;
+let currentSong = 0;
 let amountOfJumps = 0;
 
 const colours = ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3']
@@ -90,8 +90,7 @@ const gameBackground = () => {
 
 const startTimer = (duration, display) => {
   var timer = duration, minutes, seconds;
-
-  const timerCountdown = () => {
+  const test = setInterval(function () {
     minutes = parseInt(timer / 60, 10);
     seconds = parseInt(timer % 60, 10);
 
@@ -101,12 +100,10 @@ const startTimer = (duration, display) => {
     display.textContent = minutes + ":" + seconds;
 
     if (--timer < 0) {
-      timer = 0
-      clearInterval(timerCountdown)
+      timer = duration;
+      clearInterval(test)
     }
-  }
-
-  setInterval(timerCountdown, 1000);
+  }, 1000);
 }
 
 const startGame = () => {
@@ -115,10 +112,10 @@ const startGame = () => {
 
   audio.src = songs[currentSong].src;
 
-  const jumpFrequency = Math.round((totalTime / totalJumps) * 1000);
+  const jumpFrequency = Math.round((totalTime / totalNotes) * 1000);
 
   const countNotes = setInterval(function () {
-    if (amountOfJumps <= totalJumps) {
+    if ((amountOfJumps + 10) <= totalNotes) {
       amountOfJumps++;
       spawnNote()
     }
@@ -156,7 +153,13 @@ const endGame = () => {
   ctxNotes.clearRect(0, 0, canvasNotes.width, canvasNotes.height)
   timer.classList.add('hidden');
   text.innerHTML = `You scored ${amountOfJumps} points!`
-  currentSong++;
+
+  if (currentSong <= songs.length) {
+    currentSong++;
+  }
+  else {
+    currentSong = 0;
+  }
 }
 
 handleResize();

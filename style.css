@@ -26,15 +26,18 @@ html {
 h1 {
   font-size: 3rem;
   font-weight: 600;
+  text-align: center;
 }
 
 button {
-  background-color: var(--color-black);
-  padding: 1rem 3rem;
   margin: 2rem;
+  padding: 1rem 3rem;
   border: none;
   border-radius: 10px;
+  font-weight: 600;
+  font-size: 1.5rem;
   color: var(--color-white);
+  background-color: var(--color-black);
 }
 
 .canvas {
