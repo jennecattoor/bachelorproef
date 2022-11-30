@@ -31,10 +31,11 @@ const totalTime = 120;
 const amountOfNotes = 100;
 
 let columnWidth;
-let currentSong = 0;
+let currentSong = 4;
 let noteCount = 0;
 let pointCount = 0;
 let noteIsTouching = [];
+let removeNote = null;
 
 const colours = ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3'];
 
@@ -99,9 +100,7 @@ const gameBackground = (number) => {
     }
     ctxBackground.closePath();
     ctxBackground.fill();
-    ctxBackground.shadowColor = '';
     ctxBackground.shadowBlur = 0;
-
   }
 }
 
@@ -156,11 +155,16 @@ const spawnNote = () => {
     ctxNotes.closePath();
     yPosition++;
 
-    if (yPosition * speed === canvasNotes.height - 330) {
-      noteIsTouching.push(randomColumn);
-    }
-
     if (yPosition * speed <= canvasNotes.height) {
+      if (yPosition * speed === canvasNotes.height - 360) {
+        noteIsTouching.push(randomColumn);
+      }
+      else if (removeNote === randomColumn) {
+        removeNote = null;
+        noteIsTouching.shift();
+        ctxNotes.clearRect((columnWidth * randomColumn) + 15, (yPosition * speed) - 3, columnWidth, 200);
+        return
+      }
       requestAnimationFrame(drawNote);
     }
     else {
@@ -180,12 +184,12 @@ const handleJump = (button) => {
   noteIsTouching.map(number => {
     if (number === button) {
       addPoints();
+      removeNote = number;
     }
   })
 }
 
 window.addEventListener('keyup', (e) => {
-
   if (e.key === "w") {
     handleJump(0);
     gameBackground(0);
