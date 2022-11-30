@@ -2,37 +2,44 @@ import './reset.css';
 import './style.css';
 
 document.querySelector('#app').innerHTML = `
-  <h2 class="timer hidden">02:00</h2>
-  <h2 class="points hidden">0 Points</h2>
+  <div class="game-information hidden">
+    <h2 class="timer">02:00</h2>
+  <h2 class="points">0 Points</h2>
+  </div>
   <div class="game-instructions">
     <h1 class="text">Press the correct key to play game!</h1>
     <button class="button-start">Start game</button>
   </div>
-  <canvas class="canvas hidden" id="canvasNotes"></canvas>
-  <canvas class="canvas hidden" id="canvasBackground"></canvas>
-  <audio autoplay src="" class="audio" type="audio/mp3"></audio>
+  <div class="game hidden">
+    <canvas class="canvas" id="canvasNotes"></canvas>
+    <canvas class="canvas" id="canvasBackground"></canvas>
+  </div>
+  <audio muted autoplay src="" class="audio" type="audio/mp3"></audio>
 `
-const canvasBackground = document.querySelector('#canvasBackground');
-const ctxBackground = canvasBackground.getContext('2d');
+
 const canvasNotes = document.querySelector('#canvasNotes');
 const ctxNotes = canvasNotes.getContext('2d')
+const canvasBackground = document.querySelector('#canvasBackground');
+const ctxBackground = canvasBackground.getContext('2d');
 
 const text = document.querySelector('.text');
+const game = document.querySelector('.game');
 const audio = document.querySelector('.audio');
 const timer = document.querySelector('.timer');
 const points = document.querySelector('.points');
 const buttonStart = document.querySelector('.button-start');
+const gameInformation = document.querySelector('.game-information');
 const gameInstructions = document.querySelector('.game-instructions');
-
 
 const speed = 3;
 const columns = 6;
+const padding = 16;
+const blockHeight = 185;
 const totalTime = 120;
 const amountOfNotes = 100;
 
 let columnWidth;
-let currentSong = 10;
-let noteCount = 0;
+let currentSong = 0;
 let pointCount = 0;
 let noteIsTouching = [];
 let removeNote = null;
@@ -64,18 +71,8 @@ const handleResize = () => {
   gameBackground();
 };
 
-buttonStart.addEventListener('click', () => {
-  gameInstructions.classList.add('hidden');
-  canvasBackground.classList.remove('hidden');
-  canvasNotes.classList.remove('hidden');
-  noteCount = 0;
-  pointCount = 0;
-  startGame();
-})
-
-const gameBackground = (number) => {
+const gameBackground = (removeNote) => {
   ctxBackground.clearRect(0, 0, canvasBackground.width, canvasBackground.height);
-  ctxBackground.beginPath();
   for (let i = 1; i < columns; i++) {
     ctxBackground.beginPath();
     ctxBackground.moveTo(columnWidth * i, 0);
@@ -90,8 +87,8 @@ const gameBackground = (number) => {
     ctxBackground.shadowColor = '#282828';
     ctxBackground.shadowBlur = 8;
     ctxBackground.beginPath();
-    if (number === i) {
-      ctxBackground.roundRect((columnWidth * i) + 15, canvasBackground.height - 215, columnWidth - 30, 185, [10]);
+    if (removeNote === i) {
+      ctxBackground.roundRect((columnWidth * i) + padding, canvasBackground.height - 215, columnWidth - padding * 2, blockHeight, [10]);
       // if (removeNote !== null) {
       //   ctxBackground.font = "50px Arial";
       //   ctxBackground.fillText("+1 Point", (columnWidth * i), canvasBackground.height - 215);
@@ -99,7 +96,7 @@ const gameBackground = (number) => {
       setTimeout(() => { gameBackground() }, 125);
     }
     else {
-      ctxBackground.roundRect((columnWidth * i) + 15, canvasBackground.height - 200, columnWidth - 30, 185, [10]);
+      ctxBackground.roundRect((columnWidth * i) + padding, canvasBackground.height - 200, columnWidth - padding * 2, blockHeight, [10]);
     }
     ctxBackground.closePath();
     ctxBackground.fill();
@@ -108,7 +105,7 @@ const gameBackground = (number) => {
 }
 
 const startTimer = (duration, display) => {
-  var timer = duration, minutes, seconds;
+  let timer = duration, minutes, seconds;
   const test = setInterval(function () {
     minutes = parseInt(timer / 60, 10);
     seconds = parseInt(timer % 60, 10);
@@ -125,24 +122,31 @@ const startTimer = (duration, display) => {
   }, 1000);
 }
 
+buttonStart.addEventListener('click', () => {
+  pointCount = 0;
+  handleResize();
+  startGame();
+})
+
 const startGame = () => {
-  timer.classList.remove('hidden');
-  points.classList.remove('hidden');
+  gameInstructions.classList.add('hidden');
+  game.classList.remove('hidden');
+  gameInformation.classList.remove('hidden');
+
   startTimer(totalTime, timer);
 
   audio.src = songs[currentSong].src;
-  const noteFrequency = Math.round((totalTime / (amountOfNotes + 8)) * 1000);
+  const noteFrequency = Math.round(totalTime / amountOfNotes * 1000);
 
-  const countNotes = setInterval(function () {
-    if (noteCount < amountOfNotes) {
-      noteCount++;
+  setInterval(() => {
+    if (audio.currentTime < totalTime - 7) {
       spawnNote()
     }
-    else {
-      clearInterval(countNotes);
-      setTimeout(() => { endGame() }, 8000)
-    }
   }, noteFrequency);
+
+  audio.addEventListener('ended', () => {
+    endGame();
+  });
 }
 
 const spawnNote = () => {
@@ -150,22 +154,22 @@ const spawnNote = () => {
   const randomColumn = Math.floor(Math.random() * columns);
 
   const drawNote = () => {
-    ctxNotes.clearRect((columnWidth * randomColumn) + 15, (yPosition * speed) - 3, columnWidth, 10);
+    ctxNotes.clearRect((columnWidth * randomColumn) + padding, (yPosition * speed) - 3, columnWidth, 10);
     ctxNotes.beginPath();
-    ctxNotes.roundRect((columnWidth * randomColumn) + 15, yPosition * speed, columnWidth - 30, 185, [10]);
+    ctxNotes.roundRect((columnWidth * randomColumn) + padding, yPosition * speed, columnWidth - padding * 2, blockHeight, [10]);
     ctxNotes.fillStyle = '#282828';
     ctxNotes.fill();
     ctxNotes.closePath();
     yPosition++;
 
     if (yPosition * speed <= canvasNotes.height) {
-      if (yPosition * speed === canvasNotes.height - 360) {
+      if (yPosition * speed === canvasNotes.height - 125 * speed) {
         noteIsTouching.push(randomColumn);
       }
       else if (removeNote === randomColumn) {
         removeNote = null;
         noteIsTouching.shift();
-        ctxNotes.clearRect((columnWidth * randomColumn) + 15, (yPosition * speed) - 3, columnWidth, 200);
+        ctxNotes.clearRect((columnWidth * randomColumn) + padding, (yPosition * speed) - 3, columnWidth, blockHeight);
         return
       }
       requestAnimationFrame(drawNote);
@@ -192,6 +196,23 @@ const handleJump = (button) => {
   })
 }
 
+const endGame = () => {
+  game.classList.add('hidden');
+  gameInformation.classList.add('hidden');
+  gameInstructions.classList.remove('hidden')
+
+  text.innerHTML = `You scored ${pointCount} points!`
+  ctxNotes.clearRect(0, 0, canvasNotes.width, canvasNotes.height)
+
+  if (currentSong <= songs.length) {
+    currentSong++;
+  }
+  else {
+    currentSong = 0;
+  }
+}
+
+window.addEventListener('resize', handleResize);
 window.addEventListener('keyup', (e) => {
   if (e.key === "w") {
     handleJump(0);
@@ -218,22 +239,3 @@ window.addEventListener('keyup', (e) => {
     gameBackground(5);
   }
 })
-
-const endGame = () => {
-  gameInstructions.classList.remove('hidden')
-  canvasBackground.classList.add('hidden')
-  canvasNotes.classList.add('hidden')
-  ctxNotes.clearRect(0, 0, canvasNotes.width, canvasNotes.height)
-  timer.classList.add('hidden');
-  text.innerHTML = `You scored ${pointCount} points!`
-
-  if (currentSong <= songs.length) {
-    currentSong++;
-  }
-  else {
-    currentSong = 0;
-  }
-}
-
-handleResize();
-window.addEventListener('resize', handleResize);
