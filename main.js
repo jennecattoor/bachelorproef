@@ -10,7 +10,7 @@ document.querySelector('#app').innerHTML = `
   </div>
   <canvas class="canvas hidden" id="canvasNotes"></canvas>
   <canvas class="canvas hidden" id="canvasBackground"></canvas>
-  <audio muted autoplay src="" class="audio" type="audio/mp3"></audio>
+  <audio autoplay src="" class="audio" type="audio/mp3"></audio>
 `
 const canvasBackground = document.querySelector('#canvasBackground');
 const ctxBackground = canvasBackground.getContext('2d');
@@ -31,7 +31,7 @@ const totalTime = 120;
 const amountOfNotes = 100;
 
 let columnWidth;
-let currentSong = 4;
+let currentSong = 10;
 let noteCount = 0;
 let pointCount = 0;
 let noteIsTouching = [];
@@ -48,13 +48,12 @@ const songs = [
   { name: `I Wanne Dance with Somebody`, band: `Whitney Houston`, src: `./songs/iwannedance.mp3`, bpm: 119 },
   { name: `Got My Mind Set On You`, band: `George Harrison`, src: `./songs/gotmymind.mp3`, bpm: 149 },
   { name: `I'm Gonne Be`, band: `The Proclaimers`, src: `./songs/imgonnebe.mp3`, bpm: 118 },
-  { name: `September`, band: `Earth, Wind & Fire`, src: ``, bpm: 126 },
-  { name: `I Want You Back`, band: `The Jackson 5`, src: ``, bpm: 98 },
-  { name: `Help!`, band: `The Beatles`, src: ``, bpm: 95 },
-  { name: `Don't Stop Me Now`, band: `Queen`, src: ``, bpm: 156 },
-  { name: `Great Balls Of Fire`, band: `Jerry Lee Lewis`, src: ``, bpm: 79 },
-  { name: `You're The One That I Want`, band: `John Travolta, Olivia Newton-John`, src: ``, bpm: 107 },
-  { name: `Serotonin`, band: `Tom Walker`, src: ``, bpm: 164 }];
+  { name: `September`, band: `Earth, Wind & Fire`, src: `./songs/september.mp3`, bpm: 126 },
+  { name: `I Want You Back`, band: `The Jackson 5`, src: `./songs/iwantyouback.mp3`, bpm: 98 },
+  { name: `Help!`, band: `The Beatles`, src: `./songs/help.mp3`, bpm: 95 },
+  { name: `Don't Stop Me Now`, band: `Queen`, src: `./songs/dontstopmenow.mp3`, bpm: 156 },
+  { name: `Great Balls Of Fire`, band: `Jerry Lee Lewis`, src: `./songs/greatballsoffire.mp3`, bpm: 79 },
+  { name: `You're The One That I Want`, band: `John Travolta, Olivia Newton-John`, src: `./songs/theonethatiwant.mp3`, bpm: 107 }];
 
 const handleResize = () => {
   canvasBackground.width = window.innerWidth;
@@ -93,6 +92,10 @@ const gameBackground = (number) => {
     ctxBackground.beginPath();
     if (number === i) {
       ctxBackground.roundRect((columnWidth * i) + 15, canvasBackground.height - 215, columnWidth - 30, 185, [10]);
+      // if (removeNote !== null) {
+      //   ctxBackground.font = "50px Arial";
+      //   ctxBackground.fillText("+1 Point", (columnWidth * i), canvasBackground.height - 215);
+      // }
       setTimeout(() => { gameBackground() }, 125);
     }
     else {
