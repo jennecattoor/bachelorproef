@@ -36,10 +36,10 @@ const columns = 6;
 const padding = 16;
 const blockHeight = 185;
 const totalTime = 120;
-const amountOfNotes = 100;
+const amountOfNotes = 90;
 
 let columnWidth;
-let currentSong = 0;
+let currentSong = 9;
 let pointCount = 0;
 let noteIsTouching = [];
 let removeNote = null;
@@ -151,6 +151,7 @@ const startGame = () => {
 
 const spawnNote = () => {
   let yPosition = -100;
+  let noteAdded = false;
   const randomColumn = Math.floor(Math.random() * columns);
 
   const drawNote = () => {
@@ -161,10 +162,12 @@ const spawnNote = () => {
     ctxNotes.fill();
     ctxNotes.closePath();
     yPosition++;
-
+    //(yPosition * speed >= canvasNotes.height - 390
     if (yPosition * speed <= canvasNotes.height) {
-      if (yPosition * speed === canvasNotes.height - 125 * speed) {
+      if (yPosition * speed >= canvasNotes.height - 130 * speed && noteAdded == false) {
+        noteAdded = true
         noteIsTouching.push(randomColumn);
+        console.log(noteIsTouching);
       }
       else if (removeNote === randomColumn) {
         removeNote = null;
