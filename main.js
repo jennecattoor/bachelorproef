@@ -14,7 +14,7 @@ document.querySelector('#app').innerHTML = `
     <canvas class="canvas" id="canvasNotes"></canvas>
     <canvas class="canvas" id="canvasBackground"></canvas>
   </div>
-  <audio muted autoplay src="" class="audio" type="audio/mp3"></audio>
+  <audio autoplay src="" class="audio" type="audio/mp3"></audio>
 `
 
 const canvasNotes = document.querySelector('#canvasNotes');
@@ -123,6 +123,8 @@ const startTimer = (duration, display) => {
 }
 
 buttonStart.addEventListener('click', () => {
+  noteIsTouching = [];
+  points.innerHTML = '0 Points';
   pointCount = 0;
   handleResize();
   startGame();
@@ -139,7 +141,7 @@ const startGame = () => {
   const noteFrequency = Math.round(totalTime / amountOfNotes * 1000);
 
   setInterval(() => {
-    if (audio.currentTime < totalTime - 7) {
+    if (audio.currentTime < totalTime - 8) {
       spawnNote()
     }
   }, noteFrequency);
@@ -162,7 +164,7 @@ const spawnNote = () => {
     ctxNotes.fill();
     ctxNotes.closePath();
     yPosition++;
-    //(yPosition * speed >= canvasNotes.height - 390
+
     if (yPosition * speed <= canvasNotes.height) {
       if (yPosition * speed >= canvasNotes.height - 130 * speed && noteAdded == false) {
         noteAdded = true
