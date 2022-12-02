@@ -1,21 +1,7 @@
-import './reset.css';
-import './style.css';
-
-document.querySelector('#app').innerHTML = `
-  <div class="game-information hidden">
-    <h2 class="timer">02:00</h2>
-  <h2 class="points">0 Points</h2>
-  </div>
-  <div class="game-instructions">
-    <h1 class="text">Press the correct key to play game!</h1>
-    <button class="button-start">Start game</button>
-  </div>
-  <div class="game hidden">
-    <canvas class="canvas" id="canvasNotes"></canvas>
-    <canvas class="canvas" id="canvasBackground"></canvas>
-  </div>
-  <audio autoplay src="" class="audio" type="audio/mp3"></audio>
-`
+import './css/reset.css';
+import './css/style.css';
+import './p5/p5.min.js';
+import './p5/p5.sound.js';
 
 const canvasNotes = document.querySelector('#canvasNotes');
 const ctxNotes = canvasNotes.getContext('2d')
@@ -169,7 +155,6 @@ const spawnNote = () => {
       if (yPosition * speed >= canvasNotes.height - 130 * speed && noteAdded == false) {
         noteAdded = true
         noteIsTouching.push(randomColumn);
-        console.log(noteIsTouching);
       }
       else if (removeNote === randomColumn) {
         removeNote = null;
