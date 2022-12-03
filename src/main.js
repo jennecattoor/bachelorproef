@@ -1,8 +1,3 @@
-import './css/reset.css';
-import './css/style.css';
-import './p5/p5.min.js';
-import './p5/p5.sound.js';
-
 const canvasNotes = document.querySelector('#canvasNotes');
 const ctxNotes = canvasNotes.getContext('2d')
 const canvasBackground = document.querySelector('#canvasBackground');
@@ -24,11 +19,12 @@ const blockHeight = 185;
 const totalTime = 120;
 const amountOfNotes = 90;
 
-let columnWidth;
+let columnWidth, music, fft, peakDetect;
 let currentSong = 9;
 let pointCount = 0;
 let noteIsTouching = [];
 let removeNote = null;
+let previousColumn = null;
 
 const colours = ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3'];
 
@@ -108,6 +104,25 @@ const startTimer = (duration, display) => {
   }, 1000);
 }
 
+// function preload() {
+//   music = loadSound(songs[currentSong].src);
+// }
+
+function setup() {
+  fft = new p5.FFT();
+  peakDetect = new p5.PeakDetect(20, 20000, 0.31, 20);
+  delay = new p5.Delay();
+}
+
+function draw() {
+  fft.analyze();
+  peakDetect.update(fft);
+
+  if (peakDetect.isDetected) {
+    spawnNote()
+  }
+}
+
 buttonStart.addEventListener('click', () => {
   noteIsTouching = [];
   points.innerHTML = '0 Points';
@@ -117,30 +132,41 @@ buttonStart.addEventListener('click', () => {
 })
 
 const startGame = () => {
+  music = loadSound(songs[currentSong].src);
+  setup();
+  draw();
   gameInstructions.classList.add('hidden');
   game.classList.remove('hidden');
   gameInformation.classList.remove('hidden');
 
+  setTimeout(() => { music.play() }, 1000);
+
   startTimer(totalTime, timer);
 
-  audio.src = songs[currentSong].src;
-  const noteFrequency = Math.round(totalTime / amountOfNotes * 1000);
+  // audio.src = songs[currentSong].src;
+  // const noteFrequency = Math.round(totalTime / amountOfNotes * 1000);
 
-  setInterval(() => {
-    if (audio.currentTime < totalTime - 8) {
-      spawnNote()
-    }
-  }, noteFrequency);
+  // setInterval(() => {
+  //   if (audio.currentTime < totalTime - 8) {
+  //     spawnNote()
+  //   }
+  // }, noteFrequency);
 
-  audio.addEventListener('ended', () => {
-    endGame();
-  });
+  // audio.addEventListener('ended', () => {
+  //   endGame();
+  // });
 }
 
 const spawnNote = () => {
   let yPosition = -100;
   let noteAdded = false;
-  const randomColumn = Math.floor(Math.random() * columns);
+  let randomColumn = Math.floor(Math.random() * columns);
+
+  while (randomColumn === previousColumn) {
+    randomColumn = Math.floor(Math.random() * columns);
+  }
+
+  previousColumn = randomColumn;
 
   const drawNote = () => {
     ctxNotes.clearRect((columnWidth * randomColumn) + padding, (yPosition * speed) - 3, columnWidth, 10);
@@ -152,7 +178,7 @@ const spawnNote = () => {
     yPosition++;
 
     if (yPosition * speed <= canvasNotes.height) {
-      if (yPosition * speed >= canvasNotes.height - 130 * speed && noteAdded == false) {
+      if (noteAdded == false && yPosition * speed >= canvasNotes.height - 130 * speed) {
         noteAdded = true
         noteIsTouching.push(randomColumn);
       }
