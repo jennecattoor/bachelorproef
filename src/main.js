@@ -20,7 +20,7 @@ const totalTime = 120;
 const amountOfNotes = 90;
 
 let columnWidth, music, fft, peakDetect, delay;
-let currentSong = 1;
+let currentSong = 13;
 let pointCount = 0;
 let noteIsTouching = [];
 let removeNote = null;
