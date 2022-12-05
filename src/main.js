@@ -1,22 +1,3 @@
-import './reset.css';
-import './style.css';
-
-document.querySelector('#app').innerHTML = `
-  <div class="game-information hidden">
-    <h2 class="timer">02:00</h2>
-  <h2 class="points">0 Points</h2>
-  </div>
-  <div class="game-instructions">
-    <h1 class="text">Press the correct key to play game!</h1>
-    <button class="button-start">Start game</button>
-  </div>
-  <div class="game hidden">
-    <canvas class="canvas" id="canvasNotes"></canvas>
-    <canvas class="canvas" id="canvasBackground"></canvas>
-  </div>
-  <audio muted autoplay src="" class="audio" type="audio/mp3"></audio>
-`
-
 const canvasNotes = document.querySelector('#canvasNotes');
 const ctxNotes = canvasNotes.getContext('2d')
 const canvasBackground = document.querySelector('#canvasBackground');
@@ -36,13 +17,14 @@ const columns = 6;
 const padding = 16;
 const blockHeight = 185;
 const totalTime = 120;
-const amountOfNotes = 100;
+const amountOfNotes = 90;
 
-let columnWidth;
-let currentSong = 0;
+let columnWidth, music, fft, peakDetect, delay;
+let currentSong = 13;
 let pointCount = 0;
 let noteIsTouching = [];
 let removeNote = null;
+let previousColumn = null;
 
 const colours = ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3'];
 
@@ -122,36 +104,56 @@ const startTimer = (duration, display) => {
   }, 1000);
 }
 
+function setup() {
+  fft = new p5.FFT();
+  peakDetect = new p5.PeakDetect(20, 20000, 0.31, 25);
+  delay = new p5.Delay()
+}
+
+function draw() {
+  fft.analyze();
+  peakDetect.update(fft);
+
+  if (peakDetect.isDetected) {
+    spawnNote()
+    console.log('peak detected')
+  }
+}
+
 buttonStart.addEventListener('click', () => {
+  music = loadSound(songs[currentSong].src);
+  setup();
+
+  noteIsTouching = [];
+  points.innerHTML = '0 Points';
   pointCount = 0;
   handleResize();
-  startGame();
-})
 
-const startGame = () => {
   gameInstructions.classList.add('hidden');
   game.classList.remove('hidden');
   gameInformation.classList.remove('hidden');
 
-  startTimer(totalTime, timer);
+  setTimeout(() => { startGame() }, 1000);
+})
 
-  audio.src = songs[currentSong].src;
-  const noteFrequency = Math.round(totalTime / amountOfNotes * 1000);
+const startGame = () => {
+  draw();
+  music.play()
+  startTimer(music.duration(), timer);
+  music.onended(endGame);
 
-  setInterval(() => {
-    if (audio.currentTime < totalTime - 7) {
-      spawnNote()
-    }
-  }, noteFrequency);
-
-  audio.addEventListener('ended', () => {
-    endGame();
-  });
+  // audio.src = songs[currentSong].src;
 }
 
 const spawnNote = () => {
   let yPosition = -100;
-  const randomColumn = Math.floor(Math.random() * columns);
+  let noteAdded = false;
+  let randomColumn = Math.floor(Math.random() * columns);
+  while (randomColumn === previousColumn) {
+    randomColumn = Math.floor(Math.random() * columns);
+  }
+
+  previousColumn = randomColumn;
 
   const drawNote = () => {
     ctxNotes.clearRect((columnWidth * randomColumn) + padding, (yPosition * speed) - 3, columnWidth, 10);
@@ -163,7 +165,8 @@ const spawnNote = () => {
     yPosition++;
 
     if (yPosition * speed <= canvasNotes.height) {
-      if (yPosition * speed === canvasNotes.height - 125 * speed) {
+      if (noteAdded == false && yPosition * speed >= canvasNotes.height - 130 * speed) {
+        noteAdded = true
         noteIsTouching.push(randomColumn);
       }
       else if (removeNote === randomColumn) {
