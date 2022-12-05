@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="/src/css/style.css" />
   <script src="/src/p5/p5.min.js"></script>
   <script src="/src/p5/p5.sound.js"></script>
-  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <script src="/node_modules/@lottiefiles/lottie-player/dist/tgs-player.js"></script>
   <title>Wild Piano</title>
 </head>
 
@@ -21,7 +21,17 @@
     <div class="game-instructions">
       <h1 class="text">Press the correct key to play game!</h1>
       <button class="button-start">Start game</button>
-      <lottie-player class="lottie" src="/src/assets/dark-green.json" background="transparent" speed="1" loop autoplay>
+      <lottie-player class="lottie-player" src="/src/assets/purple.json" background="transparent" speed="1" autoplay
+        intermission="4500" loop style="top:3vh;left:1vw">
+      </lottie-player>
+      <lottie-player class="lottie-player" src="/src/assets/dark-green.json" background="transparent" speed="1" autoplay
+        intermission="1500" loop style="top:20vh;right:2vw">
+      </lottie-player>
+      <lottie-player class="lottie-player" src="/src/assets/green.json" background="transparent" speed="1" autoplay
+        intermission="3000" loop style="bottom:10vh;right:20vw">
+      </lottie-player>
+      <lottie-player class="lottie-player" src="/src/assets/pink.json" background="transparent" speed="1" autoplay
+        intermission="5500" loop style="bottom:3vh;left:5vw">
       </lottie-player>
     </div>
     <div class="game hidden">
