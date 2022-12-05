@@ -19,8 +19,8 @@ const blockHeight = 185;
 const totalTime = 120;
 const amountOfNotes = 90;
 
-let columnWidth, music, fft, peakDetect;
-let currentSong = 9;
+let columnWidth, music, fft, peakDetect, delay;
+let currentSong = 1;
 let pointCount = 0;
 let noteIsTouching = [];
 let removeNote = null;
@@ -104,14 +104,10 @@ const startTimer = (duration, display) => {
   }, 1000);
 }
 
-// function preload() {
-//   music = loadSound(songs[currentSong].src);
-// }
-
 function setup() {
   fft = new p5.FFT();
-  peakDetect = new p5.PeakDetect(20, 20000, 0.31, 20);
-  delay = new p5.Delay();
+  peakDetect = new p5.PeakDetect(20, 20000, 0.31, 25);
+  delay = new p5.Delay()
 }
 
 function draw() {
@@ -120,48 +116,39 @@ function draw() {
 
   if (peakDetect.isDetected) {
     spawnNote()
+    console.log('peak detected')
   }
 }
 
 buttonStart.addEventListener('click', () => {
+  music = loadSound(songs[currentSong].src);
+  setup();
+
   noteIsTouching = [];
   points.innerHTML = '0 Points';
   pointCount = 0;
   handleResize();
-  startGame();
-})
 
-const startGame = () => {
-  music = loadSound(songs[currentSong].src);
-  setup();
-  draw();
   gameInstructions.classList.add('hidden');
   game.classList.remove('hidden');
   gameInformation.classList.remove('hidden');
 
-  setTimeout(() => { music.play() }, 1000);
+  setTimeout(() => { startGame() }, 1000);
+})
 
-  startTimer(totalTime, timer);
+const startGame = () => {
+  draw();
+  music.play()
+  startTimer(music.duration(), timer);
+  music.onended(endGame);
 
   // audio.src = songs[currentSong].src;
-  // const noteFrequency = Math.round(totalTime / amountOfNotes * 1000);
-
-  // setInterval(() => {
-  //   if (audio.currentTime < totalTime - 8) {
-  //     spawnNote()
-  //   }
-  // }, noteFrequency);
-
-  // audio.addEventListener('ended', () => {
-  //   endGame();
-  // });
 }
 
 const spawnNote = () => {
   let yPosition = -100;
   let noteAdded = false;
   let randomColumn = Math.floor(Math.random() * columns);
-
   while (randomColumn === previousColumn) {
     randomColumn = Math.floor(Math.random() * columns);
   }
