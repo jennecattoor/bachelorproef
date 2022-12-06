@@ -1,7 +1,11 @@
+import Timer from './modules/Timer.js'
+// import Note from './modules/Note.js'
+// import Resize from './modules/Resize.js'
+import Background from './modules/Background.js'
 import notesTiming from './assets/timing.json' assert {type: 'json'}
 
 const canvasNotes = document.querySelector('#canvasNotes');
-const ctxNotes = canvasNotes.getContext('2d')
+const ctxNotes = canvasNotes.getContext('2d');
 const canvasBackground = document.querySelector('#canvasBackground');
 const ctxBackground = canvasBackground.getContext('2d');
 
@@ -18,7 +22,7 @@ const speed = 3;
 const columns = 6;
 const padding = 16;
 const blockHeight = 185;
-const totalTime = 120;
+const totalTime = 119;
 
 let currentNote = 0
 let columnWidth;
@@ -52,59 +56,8 @@ const handleResize = () => {
   canvasNotes.width = window.innerWidth;
   canvasNotes.height = window.innerHeight;
   columnWidth = Math.round(canvasBackground.width / columns);
-  gameBackground();
+  Background(columnWidth, columns, colours, padding, blockHeight)
 };
-
-const gameBackground = (removeNote) => {
-  ctxBackground.clearRect(0, 0, canvasBackground.width, canvasBackground.height);
-  for (let i = 1; i < columns; i++) {
-    ctxBackground.beginPath();
-    ctxBackground.moveTo(columnWidth * i, 0);
-    ctxBackground.lineTo(columnWidth * i, canvasBackground.height);
-    ctxBackground.closePath();
-    ctxBackground.lineWidth = 2;
-    ctxBackground.stroke();
-  }
-
-  for (let i = 0; i < columns; i++) {
-    ctxBackground.fillStyle = colours[i];
-    ctxBackground.shadowColor = '#282828';
-    ctxBackground.shadowBlur = 8;
-    ctxBackground.beginPath();
-    if (removeNote === i) {
-      ctxBackground.roundRect((columnWidth * i) + padding, canvasBackground.height - 215, columnWidth - padding * 2, blockHeight, [10]);
-      // if (removeNote !== null) {
-      //   ctxBackground.font = "50px Arial";
-      //   ctxBackground.fillText("+1 Point", (columnWidth * i), canvasBackground.height - 215);
-      // }
-      setTimeout(() => { gameBackground() }, 125);
-    }
-    else {
-      ctxBackground.roundRect((columnWidth * i) + padding, canvasBackground.height - 200, columnWidth - padding * 2, blockHeight, [10]);
-    }
-    ctxBackground.closePath();
-    ctxBackground.fill();
-    ctxBackground.shadowBlur = 0;
-  }
-}
-
-const startTimer = (duration, display) => {
-  let timer = duration, minutes, seconds;
-  const test = setInterval(function () {
-    minutes = parseInt(timer / 60, 10);
-    seconds = parseInt(timer % 60, 10);
-
-    minutes = minutes < 10 ? "0" + minutes : minutes;
-    seconds = seconds < 10 ? "0" + seconds : seconds;
-
-    display.textContent = minutes + ":" + seconds;
-
-    if (--timer < 0) {
-      timer = duration;
-      clearInterval(test)
-    }
-  }, 1000);
-}
 
 buttonStart.addEventListener('click', () => {
   noteIsTouching = [];
@@ -119,7 +72,7 @@ const startGame = () => {
   game.classList.remove('hidden');
   gameInformation.classList.remove('hidden');
 
-  startTimer(totalTime, timer);
+  Timer(totalTime, timer);
 
   audio.src = songs[currentSong].src;
 
@@ -129,23 +82,6 @@ const startGame = () => {
       spawnNote()
     }
   }, 50);
-
-  // function timeout() {
-  //   setTimeout(function () {
-  //     currentNote++
-  //     console.log(currentNote);
-  //     spawnNote()
-  //     timeout();
-  //   }, (notesTiming[currentNote + 1] - notesTiming[currentNote]) * 1000);
-  // };
-  // timeout();
-  // const test = setInterval(function () {
-  //   console.log('executed')
-  //   if (audio.currentTime.toFixed(2) >= notesTiming[currentNote]) {
-  //     currentNote++
-  //     spawnNote()
-  //   }
-  // }, 50);
 }
 
 const spawnNote = () => {
@@ -226,26 +162,26 @@ window.addEventListener('resize', handleResize);
 window.addEventListener('keyup', (e) => {
   if (e.key === "w") {
     handleJump(0);
-    gameBackground(0);
+    Background(columnWidth, columns, colours, padding, blockHeight, 0)
   }
   if (e.key === "x") {
     handleJump(1);
-    gameBackground(1);
+    Background(columnWidth, columns, colours, padding, blockHeight, 1)
   }
   if (e.key === "c") {
     handleJump(2);
-    gameBackground(2);
+    Background(columnWidth, columns, colours, padding, blockHeight, 2)
   }
   if (e.key === "v") {
     handleJump(3);
-    gameBackground(3);
+    Background(columnWidth, columns, colours, padding, blockHeight, 3)
   }
   if (e.key === "b") {
     handleJump(4);
-    gameBackground(4);
+    Background(columnWidth, columns, colours, padding, blockHeight, 4)
   }
   if (e.key === "n") {
     handleJump(5);
-    gameBackground(5);
+    Background(columnWidth, columns, colours, padding, blockHeight, 5)
   }
 })
