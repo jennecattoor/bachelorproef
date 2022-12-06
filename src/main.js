@@ -1,18 +1,16 @@
 import Timer from './modules/Timer.js'
-// import Note from './modules/Note.js'
-// import Resize from './modules/Resize.js'
+import Note from './modules/Note.js'
+import Resize from './modules/Resize.js'
 import Background from './modules/Background.js'
 import notesTiming from './assets/timing.json' assert {type: 'json'}
 
 const canvasNotes = document.querySelector('#canvasNotes');
 const ctxNotes = canvasNotes.getContext('2d');
 const canvasBackground = document.querySelector('#canvasBackground');
-const ctxBackground = canvasBackground.getContext('2d');
 
 const text = document.querySelector('.text');
 const game = document.querySelector('.game');
 const audio = document.querySelector('.audio');
-const timer = document.querySelector('.timer');
 const points = document.querySelector('.points');
 const buttonStart = document.querySelector('.button-start');
 const gameInformation = document.querySelector('.game-information');
@@ -50,29 +48,25 @@ const songs = [
   { name: `Great Balls Of Fire`, band: `Jerry Lee Lewis`, src: `./songs/greatballsoffire.mp3`, bpm: 79 },
   { name: `You're The One That I Want`, band: `John Travolta, Olivia Newton-John`, src: `./songs/theonethatiwant.mp3`, bpm: 107 }];
 
-const handleResize = () => {
-  canvasBackground.width = window.innerWidth;
-  canvasBackground.height = window.innerHeight;
-  canvasNotes.width = window.innerWidth;
-  canvasNotes.height = window.innerHeight;
-  columnWidth = Math.round(canvasBackground.width / columns);
-  Background(columnWidth, columns, colours, padding, blockHeight)
-};
-
 buttonStart.addEventListener('click', () => {
-  noteIsTouching = [];
-  points.innerHTML = '0 Points';
-  pointCount = 0;
-  handleResize();
   startGame()
 })
 
+/* START GAME */
+
 const startGame = () => {
+  noteIsTouching = [];
+  points.innerHTML = '0 Points';
+  pointCount = 0;
+
+  Resize();
+  columnWidth = Math.round(canvasBackground.width / columns);
+  Background(columnWidth, columns, colours, padding, blockHeight)
+
   gameInstructions.classList.add('hidden');
   game.classList.remove('hidden');
-  gameInformation.classList.remove('hidden');
 
-  Timer(totalTime, timer);
+  Timer(totalTime);
 
   audio.src = songs[currentSong].src;
 
@@ -83,6 +77,8 @@ const startGame = () => {
     }
   }, 50);
 }
+
+/* SPAWN NOTE */
 
 const spawnNote = () => {
   let yPosition = -100;
@@ -95,12 +91,7 @@ const spawnNote = () => {
   previousColumn = randomColumn;
 
   const drawNote = () => {
-    ctxNotes.clearRect((columnWidth * randomColumn) + padding, (yPosition * speed) - 3, columnWidth, 10);
-    ctxNotes.beginPath();
-    ctxNotes.roundRect((columnWidth * randomColumn) + padding, yPosition * speed, columnWidth - padding * 2, blockHeight, [10]);
-    ctxNotes.fillStyle = '#282828';
-    ctxNotes.fill();
-    ctxNotes.closePath();
+    Note(columnWidth, padding, blockHeight, randomColumn, yPosition)
     yPosition++;
 
     if (yPosition * speed <= canvasNotes.height) {
@@ -124,23 +115,19 @@ const spawnNote = () => {
   drawNote()
 }
 
-const addPoints = () => {
-  pointCount++;
-  points.innerHTML = pointCount + ' Points';
-}
+/* HANDLE JUMP */
 
 const handleJump = (button) => {
   noteIsTouching.map(number => {
     if (number === button) {
-      addPoints();
       removeNote = number;
+      pointCount++;
+      points.innerHTML = pointCount + ' Points';
     }
   })
 }
 
-audio.addEventListener('ended', () => {
-  endGame();
-});
+/* END GAME */
 
 const endGame = () => {
   game.classList.add('hidden');
@@ -158,7 +145,17 @@ const endGame = () => {
   }
 }
 
-window.addEventListener('resize', handleResize);
+/* EventListeners */
+
+audio.addEventListener('ended', () => {
+  endGame();
+});
+
+window.addEventListener('resize', () => {
+  columnWidth = Math.round(canvasBackground.width / columns);
+  Resize(columns, columnWidth)
+});
+
 window.addEventListener('keyup', (e) => {
   if (e.key === "w") {
     handleJump(0);

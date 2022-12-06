@@ -12,12 +12,11 @@
 
 <body>
   <main>
-    <div class="game-information hidden">
-      <h2 class="timer">02:00</h2>
-      <h2 class="points">0 Points</h2>
-    </div>
     <div class="game-instructions">
-      <h1 class="text">Press the correct key to play game!</h1>
+      <h1 class="title">Let's have fun!</h1>
+      <h2 class="text">
+        <span>Take place</span> on one of the coloured squares. A minimum of <span>2 players</span> is required.
+      </h2>
       <button class="button-start">Start game</button>
       <!-- <lottie-player class="lottie-player" src="/src/assets/purple.json" autoplay intermission="4500" loop
         style="top:3vh; left:1vw">
@@ -27,12 +26,16 @@
       </lottie-player>
       <lottie-player class="lottie-player" src="/src/assets/green.json" autoplay intermission="3000" loop
         style="bottom:10vh; right:20vw">
-      </lottie-player>
-      <lottie-player class="lottie-player" src="/src/assets/pink.json" autoplay intermission="5500" loop
-        style="bottom:3vh; left:5vw"> 
-      </lottie-player>-->
+      </lottie-player> -->
+      <!-- <lottie-player class="lottie-player" src="/src/assets/dark-green.json" autoplay intermission="500" loop
+        style="bottom:3vh; left:5vw">
+      </lottie-player> -->
     </div>
     <div class="game hidden">
+      <div class="game-information">
+        <h2 class="timer absolute">02:00</h2>
+        <h2 class="points absolute">0 Points</h2>
+      </div>
       <canvas class="canvas" id="canvasNotes"></canvas>
       <canvas class="canvas" id="canvasBackground"></canvas>
     </div>
