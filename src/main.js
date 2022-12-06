@@ -1,3 +1,5 @@
+import notesTiming from './assets/timing.json' assert {type: 'json'}
+
 const canvasNotes = document.querySelector('#canvasNotes');
 const ctxNotes = canvasNotes.getContext('2d')
 const canvasBackground = document.querySelector('#canvasBackground');
@@ -17,10 +19,10 @@ const columns = 6;
 const padding = 16;
 const blockHeight = 185;
 const totalTime = 120;
-const amountOfNotes = 90;
 
-let columnWidth, music, fft, peakDetect, delay;
-let currentSong = 13;
+let currentNote = 0
+let columnWidth;
+let currentSong = 9;
 let pointCount = 0;
 let noteIsTouching = [];
 let removeNote = null;
@@ -38,7 +40,7 @@ const songs = [
   { name: `Got My Mind Set On You`, band: `George Harrison`, src: `./songs/gotmymind.mp3`, bpm: 149 },
   { name: `I'm Gonne Be`, band: `The Proclaimers`, src: `./songs/imgonnebe.mp3`, bpm: 118 },
   { name: `September`, band: `Earth, Wind & Fire`, src: `./songs/september.mp3`, bpm: 126 },
-  { name: `I Want You Back`, band: `The Jackson 5`, src: `./songs/iwantyouback.mp3`, bpm: 98 },
+  { name: `I Want You Back`, band: `The Jackson 5`, src: `./songs/iwantyouback.mp3`, notes: 'assets/iwantyouback.json' },
   { name: `Help!`, band: `The Beatles`, src: `./songs/help.mp3`, bpm: 95 },
   { name: `Don't Stop Me Now`, band: `Queen`, src: `./songs/dontstopmenow.mp3`, bpm: 156 },
   { name: `Great Balls Of Fire`, band: `Jerry Lee Lewis`, src: `./songs/greatballsoffire.mp3`, bpm: 79 },
@@ -104,45 +106,46 @@ const startTimer = (duration, display) => {
   }, 1000);
 }
 
-function setup() {
-  fft = new p5.FFT();
-  peakDetect = new p5.PeakDetect(20, 20000, 0.31, 25);
-  delay = new p5.Delay()
-}
-
-function draw() {
-  fft.analyze();
-  peakDetect.update(fft);
-
-  if (peakDetect.isDetected) {
-    spawnNote()
-    console.log('peak detected')
-  }
-}
-
 buttonStart.addEventListener('click', () => {
-  music = loadSound(songs[currentSong].src);
-  setup();
-
   noteIsTouching = [];
   points.innerHTML = '0 Points';
   pointCount = 0;
   handleResize();
+  startGame()
+})
 
+const startGame = () => {
   gameInstructions.classList.add('hidden');
   game.classList.remove('hidden');
   gameInformation.classList.remove('hidden');
 
-  setTimeout(() => { startGame() }, 1000);
-})
+  startTimer(totalTime, timer);
 
-const startGame = () => {
-  draw();
-  music.play()
-  startTimer(music.duration(), timer);
-  music.onended(endGame);
+  audio.src = songs[currentSong].src;
 
-  // audio.src = songs[currentSong].src;
+  setInterval(function () {
+    if ((audio.currentTime.toFixed(2)) >= (notesTiming[currentNote]) - 5.5) {
+      currentNote++
+      spawnNote()
+    }
+  }, 50);
+
+  // function timeout() {
+  //   setTimeout(function () {
+  //     currentNote++
+  //     console.log(currentNote);
+  //     spawnNote()
+  //     timeout();
+  //   }, (notesTiming[currentNote + 1] - notesTiming[currentNote]) * 1000);
+  // };
+  // timeout();
+  // const test = setInterval(function () {
+  //   console.log('executed')
+  //   if (audio.currentTime.toFixed(2) >= notesTiming[currentNote]) {
+  //     currentNote++
+  //     spawnNote()
+  //   }
+  // }, 50);
 }
 
 const spawnNote = () => {
@@ -199,6 +202,10 @@ const handleJump = (button) => {
   })
 }
 
+audio.addEventListener('ended', () => {
+  endGame();
+});
+
 const endGame = () => {
   game.classList.add('hidden');
   gameInformation.classList.add('hidden');
@@ -207,7 +214,7 @@ const endGame = () => {
   text.innerHTML = `You scored ${pointCount} points!`
   ctxNotes.clearRect(0, 0, canvasNotes.width, canvasNotes.height)
 
-  if (currentSong <= songs.length) {
+  if (currentSong < songs.length - 1) {
     currentSong++;
   }
   else {
