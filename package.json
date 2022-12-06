@@ -12,5 +12,8 @@
   "devDependencies": {
     "@tauri-apps/cli": "^1.2.0",
     "vite": "^3.2.3"
+  },
+  "dependencies": {
+    "@lottiefiles/lottie-player": "^1.6.1"
   }
 }
