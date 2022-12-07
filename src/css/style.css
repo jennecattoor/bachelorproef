@@ -1,6 +1,11 @@
+@font-face {
+  font-family: Dia;
+  src: './assets/font/Dia.otf';
+}
+
 html {
   box-sizing: border-box;
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-family: Dia, Inter, Avenir, Helvetica, Arial, sans-serif;
 }
 
 *,
