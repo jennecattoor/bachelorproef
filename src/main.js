@@ -27,12 +27,13 @@ const totalTime = 119;
 let columnWidth;
 let currentSong = 0;
 let noteIsTouching = [];
-let startGameCountdown = 20;
+let startGameCountdown = 3;
 let removeNote = null;
-let previousColumn = null;
 let currentNote = 0;
 let amountOfPlayers = 0;
 let pointCount = 0;
+let columnsPlaying = [];
+let currentPlayer = 0;
 
 const colours = ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3'];
 
@@ -53,6 +54,8 @@ const startGame = () => {
 
   Timer(totalTime);
 
+  // shuffleArray(columnsPlaying);
+
   audio.src = Songs[currentSong].src;
 
   const interval = setInterval(function () {
@@ -67,30 +70,29 @@ const startGame = () => {
 }
 
 /* SPAWN NOTE */
-
 const spawnNote = () => {
   let yPosition = -100;
   let noteAdded = false;
-  let randomColumn = Math.floor(Math.random() * columns);
-  while (randomColumn === previousColumn) {
-    randomColumn = Math.floor(Math.random() * columns);
+
+  let column = columnsPlaying[currentPlayer]
+  currentPlayer++
+  if (currentPlayer > columnsPlaying.length) {
+    currentPlayer = 0
   }
 
-  previousColumn = randomColumn;
-
   const drawNote = () => {
-    Note(columnWidth, padding, blockHeight, randomColumn, yPosition)
+    Note(columnWidth, padding, blockHeight, column, yPosition)
     yPosition++;
 
     if (yPosition * speed <= canvasNotes.height) {
       if (noteAdded == false && yPosition * speed >= canvasNotes.height - 130 * speed) {
         noteAdded = true
-        noteIsTouching.push(randomColumn);
+        noteIsTouching.push(column);
       }
-      else if (removeNote === randomColumn) {
+      else if (removeNote === column) {
         removeNote = null;
         noteIsTouching.shift();
-        ctxNotes.clearRect((columnWidth * randomColumn) + padding, (yPosition * speed) - 3, columnWidth, blockHeight);
+        ctxNotes.clearRect((columnWidth * column) + padding, (yPosition * speed) - 3, columnWidth, blockHeight);
         return
       }
       requestAnimationFrame(drawNote);
@@ -213,7 +215,10 @@ window.addEventListener('resize', () => {
 window.addEventListener('keyup', (e) => {
   if (e.key === "w") {
     if (game.classList.contains('hidden')) {
-      playerReady(0)
+      if (!columnsPlaying.includes(0)) {
+        playerReady(0)
+        columnsPlaying.push(0)
+      }
     } else {
       handleJump(0);
       Background(columnWidth, columns, colours, padding, blockHeight, 0)
@@ -221,7 +226,10 @@ window.addEventListener('keyup', (e) => {
   }
   if (e.key === "x") {
     if (game.classList.contains('hidden')) {
-      playerReady(1)
+      if (!columnsPlaying.includes(1)) {
+        playerReady(1)
+        columnsPlaying.push(1)
+      }
     } else {
       handleJump(1);
       Background(columnWidth, columns, colours, padding, blockHeight, 1)
@@ -229,7 +237,10 @@ window.addEventListener('keyup', (e) => {
   }
   if (e.key === "c") {
     if (game.classList.contains('hidden')) {
-      playerReady(2)
+      if (!columnsPlaying.includes(2)) {
+        playerReady(2)
+        columnsPlaying.push(2)
+      }
     } else {
       handleJump(2);
       Background(columnWidth, columns, colours, padding, blockHeight, 2)
@@ -237,7 +248,10 @@ window.addEventListener('keyup', (e) => {
   }
   if (e.key === "v") {
     if (game.classList.contains('hidden')) {
-      playerReady(3)
+      if (!columnsPlaying.includes(3)) {
+        playerReady(3)
+        columnsPlaying.push(3)
+      }
     } else {
       handleJump(3);
       Background(columnWidth, columns, colours, padding, blockHeight, 3)
@@ -245,7 +259,11 @@ window.addEventListener('keyup', (e) => {
   }
   if (e.key === "b") {
     if (game.classList.contains('hidden')) {
-      playerReady(4)
+      if (!columnsPlaying.includes(2)) {
+        playerReady(4)
+        columnsPlaying.push(4)
+        console.log('added')
+      }
     } else {
       handleJump(4);
       Background(columnWidth, columns, colours, padding, blockHeight, 4)
@@ -253,7 +271,10 @@ window.addEventListener('keyup', (e) => {
   }
   if (e.key === "n") {
     if (game.classList.contains('hidden')) {
-      playerReady(5)
+      if (!columnsPlaying.includes(5)) {
+        playerReady(5)
+        columnsPlaying.push(5)
+      }
     } else {
       handleJump(5);
       Background(columnWidth, columns, colours, padding, blockHeight, 5)
