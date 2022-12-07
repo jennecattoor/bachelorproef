@@ -3,7 +3,7 @@ import Note from './modules/Note.js'
 import Resize from './modules/Resize.js'
 import Background from './modules/Background.js'
 import Onboarding from './modules/Onboarding.js'
-import notesTiming from './assets/timing.json' assert {type: 'json'}
+import Songs from './assets/songs.json' assert {type: 'json'}
 
 const canvasNotes = document.querySelector('#canvasNotes');
 const ctxNotes = canvasNotes.getContext('2d');
@@ -16,7 +16,6 @@ const game = document.querySelector('.game');
 const audio = document.querySelector('.audio');
 const points = document.querySelector('.points');
 const buttonStart = document.querySelector('.button-start');
-const gameInformation = document.querySelector('.game-information');
 const gameInstructions = document.querySelector('.game-instructions');
 
 const speed = 3;
@@ -26,10 +25,9 @@ const blockHeight = 185;
 const totalTime = 119;
 
 let columnWidth;
-let currentSong = 9;
-let gameActive = false;
+let currentSong = 0;
 let noteIsTouching = [];
-let startGameCountdown = 3;
+let startGameCountdown = 20;
 let removeNote = null;
 let previousColumn = null;
 let currentNote = 0;
@@ -38,47 +36,32 @@ let pointCount = 0;
 
 const colours = ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3'];
 
-const songs = [
-  { name: `Take On Me`, band: `a-ha`, src: `./songs/takeonme.mp3`, bpm: 84 },
-  { name: `Hold the Line`, band: `TOTO`, src: `./songs/holdtheline.mp3`, bpm: 97 },
-  { name: `Your Love`, band: `The Outfield`, src: `./songs/yourlove.mp3`, bpm: 130 },
-  { name: `I'm Still Standing`, band: `Elton John`, src: `./songs/imstillstanding.mp3`, bpm: 88 },
-  { name: `Dancing Queen`, band: `ABBA`, src: `./songs/dancingqueen.mp3`, bpm: 101 },
-  { name: `I Wanne Dance with Somebody`, band: `Whitney Houston`, src: `./songs/iwannedance.mp3`, bpm: 119 },
-  { name: `Got My Mind Set On You`, band: `George Harrison`, src: `./songs/gotmymind.mp3`, bpm: 149 },
-  { name: `I'm Gonne Be`, band: `The Proclaimers`, src: `./songs/imgonnebe.mp3`, bpm: 118 },
-  { name: `September`, band: `Earth, Wind & Fire`, src: `./songs/september.mp3`, bpm: 126 },
-  { name: `I Want You Back`, band: `The Jackson 5`, src: `./songs/iwantyouback.mp3`, notes: 'assets/iwantyouback.json' },
-  { name: `Help!`, band: `The Beatles`, src: `./songs/help.mp3`, bpm: 95 },
-  { name: `Don't Stop Me Now`, band: `Queen`, src: `./songs/dontstopmenow.mp3`, bpm: 156 },
-  { name: `Great Balls Of Fire`, band: `Jerry Lee Lewis`, src: `./songs/greatballsoffire.mp3`, bpm: 79 },
-  { name: `You're The One That I Want`, band: `John Travolta, Olivia Newton-John`, src: `./songs/theonethatiwant.mp3`, bpm: 107 }];
-
-// buttonStart.addEventListener('click', () => {
-//   startGame()
-// })
+buttonStart.addEventListener('click', () => {
+  startGame()
+})
 
 /* START GAME */
 
 const startGame = () => {
-  gameActive = true;
   points.innerHTML = '0 Points';
-
-  Resize();
-  columnWidth = Math.round(canvasBackground.width / columns);
-  Background(columnWidth, columns, colours, padding, blockHeight)
 
   gameInstructions.classList.add('hidden');
   game.classList.remove('hidden');
 
+  Resize();
+  Background(columnWidth, columns, colours, padding, blockHeight)
+
   Timer(totalTime);
 
-  audio.src = songs[currentSong].src;
+  audio.src = Songs[currentSong].src;
 
-  setInterval(function () {
-    if ((audio.currentTime.toFixed(2)) >= (notesTiming[currentNote]) - 5.5) {
+  const interval = setInterval(function () {
+    if ((audio.currentTime.toFixed(2)) >= (Songs[currentSong].timings[currentNote]) - 5.5) {
       currentNote++
       spawnNote()
+    }
+    if (currentNote >= Songs[currentSong].timings.length) {
+      clearInterval(interval);
     }
   }, 50);
 }
@@ -145,8 +128,7 @@ const endGame = () => {
 
   ctxBackground.clearRect(0, 0, canvasBackground.width, canvasBackground.height);
 
-  gameActive = false;
-  if (currentSong < songs.length - 1) {
+  if (currentSong < Songs.length - 1) {
     currentSong++;
   }
   else {
@@ -206,8 +188,8 @@ const gameExplenation = () => {
 }
 
 const shuffleSong = () => {
-  title.innerHTML = songs[currentSong].name;
-  text.innerHTML = "<span>" + songs[currentSong].band + "</span>";
+  title.innerHTML = Songs[currentSong].name;
+  text.innerHTML = "<span>" + Songs[currentSong].band + "</span>";
   setTimeout(() => { startGame() }, 5000);
 }
 
@@ -220,7 +202,7 @@ audio.addEventListener('ended', () => {
 window.addEventListener('resize', () => {
   columnWidth = Math.round(canvasBackground.width / columns);
   Resize(columns, columnWidth)
-  if (gameActive === true) {
+  if (!game.classList.contains('hidden')) {
     Background(columnWidth, columns, colours, padding, blockHeight)
   }
   else {
@@ -230,7 +212,7 @@ window.addEventListener('resize', () => {
 
 window.addEventListener('keyup', (e) => {
   if (e.key === "w") {
-    if (gameActive === false) {
+    if (game.classList.contains('hidden')) {
       playerReady(0)
     } else {
       handleJump(0);
@@ -238,7 +220,7 @@ window.addEventListener('keyup', (e) => {
     }
   }
   if (e.key === "x") {
-    if (gameActive === false) {
+    if (game.classList.contains('hidden')) {
       playerReady(1)
     } else {
       handleJump(1);
@@ -246,7 +228,7 @@ window.addEventListener('keyup', (e) => {
     }
   }
   if (e.key === "c") {
-    if (gameActive === false) {
+    if (game.classList.contains('hidden')) {
       playerReady(2)
     } else {
       handleJump(2);
@@ -254,7 +236,7 @@ window.addEventListener('keyup', (e) => {
     }
   }
   if (e.key === "v") {
-    if (gameActive === false) {
+    if (game.classList.contains('hidden')) {
       playerReady(3)
     } else {
       handleJump(3);
@@ -262,7 +244,7 @@ window.addEventListener('keyup', (e) => {
     }
   }
   if (e.key === "b") {
-    if (gameActive === false) {
+    if (game.classList.contains('hidden')) {
       playerReady(4)
     } else {
       handleJump(4);
@@ -270,7 +252,7 @@ window.addEventListener('keyup', (e) => {
     }
   }
   if (e.key === "n") {
-    if (gameActive === false) {
+    if (game.classList.contains('hidden')) {
       playerReady(5)
     } else {
       handleJump(5);
