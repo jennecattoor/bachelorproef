@@ -49,6 +49,14 @@ h1 {
   z-index: 1;
 }
 
+#canvasBackground {
+  z-index: -1;
+}
+
+#canvasNotes {
+  z-index: -2;
+}
+
 .absolute {
   position: absolute;
   top: 1rem;
@@ -69,7 +77,7 @@ h1 {
 .game-instructions {
   position: absolute;
   width: 100vw;
-  height: 100vh;
+  height: 88vh;
   display: flex;
   align-items: center;
   flex-direction: column;

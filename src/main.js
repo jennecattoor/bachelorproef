@@ -2,12 +2,15 @@ import Timer from './modules/Timer.js'
 import Note from './modules/Note.js'
 import Resize from './modules/Resize.js'
 import Background from './modules/Background.js'
+import Onboarding from './modules/Onboarding.js'
 import notesTiming from './assets/timing.json' assert {type: 'json'}
 
 const canvasNotes = document.querySelector('#canvasNotes');
 const ctxNotes = canvasNotes.getContext('2d');
 const canvasBackground = document.querySelector('#canvasBackground');
+const ctxBackground = canvasBackground.getContext('2d');
 
+const title = document.querySelector('.title');
 const text = document.querySelector('.text');
 const game = document.querySelector('.game');
 const audio = document.querySelector('.audio');
@@ -22,13 +25,16 @@ const padding = 16;
 const blockHeight = 185;
 const totalTime = 119;
 
-let currentNote = 0
 let columnWidth;
 let currentSong = 9;
-let pointCount = 0;
+let gameActive = false;
 let noteIsTouching = [];
+let startGameCountdown = 3;
 let removeNote = null;
 let previousColumn = null;
+let currentNote = 0;
+let amountOfPlayers = 0;
+let pointCount = 0;
 
 const colours = ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3'];
 
@@ -48,16 +54,15 @@ const songs = [
   { name: `Great Balls Of Fire`, band: `Jerry Lee Lewis`, src: `./songs/greatballsoffire.mp3`, bpm: 79 },
   { name: `You're The One That I Want`, band: `John Travolta, Olivia Newton-John`, src: `./songs/theonethatiwant.mp3`, bpm: 107 }];
 
-buttonStart.addEventListener('click', () => {
-  startGame()
-})
+// buttonStart.addEventListener('click', () => {
+//   startGame()
+// })
 
 /* START GAME */
 
 const startGame = () => {
-  noteIsTouching = [];
+  gameActive = true;
   points.innerHTML = '0 Points';
-  pointCount = 0;
 
   Resize();
   columnWidth = Math.round(canvasBackground.width / columns);
@@ -131,18 +136,79 @@ const handleJump = (button) => {
 
 const endGame = () => {
   game.classList.add('hidden');
-  gameInformation.classList.add('hidden');
   gameInstructions.classList.remove('hidden')
+  canvasBackground.classList.add('hidden');
 
-  text.innerHTML = `You scored ${pointCount} points!`
+  title.innerHTML = `Great job!`
+  text.innerHTML = `Your team scored <span>${pointCount} points!<span>`
   ctxNotes.clearRect(0, 0, canvasNotes.width, canvasNotes.height)
 
+  ctxBackground.clearRect(0, 0, canvasBackground.width, canvasBackground.height);
+
+  gameActive = false;
   if (currentSong < songs.length - 1) {
     currentSong++;
   }
   else {
     currentSong = 0;
   }
+
+  setTimeout(() => { resetGame() }, 6000);
+}
+
+const resetGame = () => {
+  canvasBackground.classList.remove('hidden');
+  noteIsTouching = [];
+  startGameCountdown = 20;
+  previousColumn = null
+  removeNote = null;
+  pointCount = 0
+  currentNote = 0
+  amountOfPlayers = 0
+  title.innerHTML = `Let's have fun!`
+  text.innerHTML = `<span>Take place</span> on one of the coloured squares. A minimum of <span>2 players</span> are required.`
+  showOnboarding()
+}
+
+/* ONBOARDING */
+Resize()
+columnWidth = Math.round(canvasBackground.width / columns);
+const showOnboarding = () => {
+  for (let i = 0; i < columns; i++) {
+    Onboarding(columnWidth, padding, blockHeight, i, '#D1DAC9', 'TAKE PLACE')
+  }
+}
+showOnboarding()
+
+const playerReady = (playerColumn) => {
+  Onboarding(columnWidth, padding, blockHeight, playerColumn, '#697D43', 'READY')
+
+  amountOfPlayers++;
+  if (amountOfPlayers === 2) { gameCountdown(); }
+}
+
+const gameCountdown = () => {
+  let timerInterval = setInterval(function () {
+    title.innerHTML = "Get Ready!";
+    text.innerHTML = "We are starting in <span>" + startGameCountdown + " seconds</span>. Feel free to <span>join</span> by taking place on a free square."
+    startGameCountdown -= 1;
+    if (startGameCountdown < 0) {
+      gameExplenation();
+      clearInterval(timerInterval);
+    }
+  }, 1000);
+}
+
+const gameExplenation = () => {
+  title.innerHTML = "How it works";
+  text.innerHTML = "<span>Jump</span> when a note reaches your colour. Gain <span>points</span> with your team"
+  setTimeout(() => { shuffleSong() }, 5000);
+}
+
+const shuffleSong = () => {
+  title.innerHTML = songs[currentSong].name;
+  text.innerHTML = "<span>" + songs[currentSong].band + "</span>";
+  setTimeout(() => { startGame() }, 5000);
 }
 
 /* EventListeners */
@@ -154,31 +220,61 @@ audio.addEventListener('ended', () => {
 window.addEventListener('resize', () => {
   columnWidth = Math.round(canvasBackground.width / columns);
   Resize(columns, columnWidth)
+  if (gameActive === true) {
+    Background(columnWidth, columns, colours, padding, blockHeight)
+  }
+  else {
+    showOnboarding()
+  }
 });
 
 window.addEventListener('keyup', (e) => {
   if (e.key === "w") {
-    handleJump(0);
-    Background(columnWidth, columns, colours, padding, blockHeight, 0)
+    if (gameActive === false) {
+      playerReady(0)
+    } else {
+      handleJump(0);
+      Background(columnWidth, columns, colours, padding, blockHeight, 0)
+    }
   }
   if (e.key === "x") {
-    handleJump(1);
-    Background(columnWidth, columns, colours, padding, blockHeight, 1)
+    if (gameActive === false) {
+      playerReady(1)
+    } else {
+      handleJump(1);
+      Background(columnWidth, columns, colours, padding, blockHeight, 1)
+    }
   }
   if (e.key === "c") {
-    handleJump(2);
-    Background(columnWidth, columns, colours, padding, blockHeight, 2)
+    if (gameActive === false) {
+      playerReady(2)
+    } else {
+      handleJump(2);
+      Background(columnWidth, columns, colours, padding, blockHeight, 2)
+    }
   }
   if (e.key === "v") {
-    handleJump(3);
-    Background(columnWidth, columns, colours, padding, blockHeight, 3)
+    if (gameActive === false) {
+      playerReady(3)
+    } else {
+      handleJump(3);
+      Background(columnWidth, columns, colours, padding, blockHeight, 3)
+    }
   }
   if (e.key === "b") {
-    handleJump(4);
-    Background(columnWidth, columns, colours, padding, blockHeight, 4)
+    if (gameActive === false) {
+      playerReady(4)
+    } else {
+      handleJump(4);
+      Background(columnWidth, columns, colours, padding, blockHeight, 4)
+    }
   }
   if (e.key === "n") {
-    handleJump(5);
-    Background(columnWidth, columns, colours, padding, blockHeight, 5)
+    if (gameActive === false) {
+      playerReady(5)
+    } else {
+      handleJump(5);
+      Background(columnWidth, columns, colours, padding, blockHeight, 5)
+    }
   }
 })
