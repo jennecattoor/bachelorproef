@@ -2,9 +2,11 @@ import 'phaser'
 
 let mole1, mole2, mole3, mole4, mole5, mole6;
 let spawnSpeed = 2000;
-let moleTimeUp = 2500
+let lives = 3;
 let molesUp = [];
+let molesAnimated = [];
 let scale;
+let points = 0
 
 class Game extends Phaser.Scene {
     constructor() {
@@ -18,12 +20,13 @@ class Game extends Phaser.Scene {
         this.load.image('mask-bottem', './src/assets/images/mask-bottem.png');
         this.load.image('mole', './src/assets/images/mole.png');
         this.load.image('hit', './src/assets/images/hit.png');
+        this.load.image('heart', './src/assets/images/heart.png');
     }
 
 
     create() {
         // Fading in camera
-        // this.cameras.main.fadeIn(4000);
+        this.cameras.main.fadeIn(4000);
         // this.add.text(0, 0, 'You need to make sure that the moles cant steal the guitar', { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
 
         //Setting the background
@@ -33,9 +36,13 @@ class Game extends Phaser.Scene {
         scale = Math.max(scaleX, scaleY)
         background.setScale(scale).setScrollFactor(0)
 
+        // Points text
+        this.scoreText = this.add.text(20, 20, '0 Points', { fontFamily: 'Arial, Georgia, "Goudy Bookletter 1911", serif', color: '#282828', fontSize: '6rem' });
+        this.lives = this.add.text(this.cameras.main.width - 220, 20, '3 Lives', { fontFamily: 'Arial, Georgia, "Goudy Bookletter 1911", serif', color: '#282828', fontSize: '6rem' });
+
         // Playing the audio
-        // let audio = this.sound.add('assignment');
-        // audio.play();
+        let audio = this.sound.add('assignment');
+        audio.play();
 
         // Creating the mask from the top
         let maskShapeTop = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'mask-top').setVisible(false);
@@ -107,6 +114,8 @@ class Game extends Phaser.Scene {
 
     hitMole = (moleNr) => {
         if (molesUp.includes(moleNr)) {
+            points++;
+            this.scoreText.setText(points + ' Points');
             this.moveMoleBack(moleNr)
             let hit = this.add.image(moleNr.x - 80, moleNr.y - 70, 'hit')
             hit.setScale(scale).setScrollFactor(0)
@@ -115,7 +124,6 @@ class Game extends Phaser.Scene {
     }
 
     moveMoleBack = (moleNr) => {
-        // moleTimeUp.reset()
         molesUp = molesUp.filter(mole => mole != moleNr)
         let tween = this.tweens.add({
             y: moleNr.y + 150,
@@ -123,6 +131,7 @@ class Game extends Phaser.Scene {
             ease: "Power1",
             duration: 250,
             onComplete: () => {
+                molesAnimated = molesAnimated.filter(mole => mole != moleNr)
                 tween.remove();
             }
         })
@@ -139,22 +148,36 @@ class Game extends Phaser.Scene {
                 tween.remove();
             }
         })
-        // moleTimeUp = this.time.delayedCall(3000, () => this.moveMoleBack(moleNr), this);
+        this.time.delayedCall(2000, () => { this.checkMoleTime(moleNr); }, [], this);
+    }
+
+    checkMoleTime = (moleNr) => {
+        if (molesUp.includes(moleNr)) {
+            this.moveMoleBack(moleNr)
+            lives--;
+            this.lives.setText(lives + ' Lives');
+            if (lives === 0) {
+                this.cameras.main.shake(500);
+            }
+        }
     }
 
     spawnMoles = () => {
         const moles = [mole1, mole2, mole3, mole4, mole5, mole6]
         setInterval(() => {
             let randomMole = Math.floor(Math.random() * 6);
-            while (molesUp.includes(moles[randomMole])) {
+            while (molesAnimated.includes(moles[randomMole])) {
                 randomMole = Math.floor(Math.random() * 6);
-                if (molesUp.length === moles.length) {
+                if (molesAnimated.length === moles.length) {
                     this.cameras.main.shake(500);
                     return
                 }
             }
             this.moveMole(moles[randomMole])
+            molesAnimated.push(moles[randomMole])
         }, spawnSpeed)
+        // game.time.events.loop(Phaser.Timer.SECOND, this.addMonster, this);
+
     }
 
     update() {

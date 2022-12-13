@@ -1,6 +1,7 @@
 import 'phaser'
 import Menu from './scenes/menu'
 import Game from './scenes/game'
+import Points from './scenes/points'
 
 window.addEventListener('resize', function (event) {
   window.location.reload();
@@ -16,7 +17,7 @@ var config = {
     mode: Phaser.Scale.RESIZE,
     autoCenter: Phaser.Scale.CENTER_BOTH
   },
-  scene: [Game, Menu]
+  scene: [Menu, Game, Points]
 };
 
 let game = new Phaser.Game(config);
