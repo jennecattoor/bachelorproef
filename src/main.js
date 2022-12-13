@@ -9,8 +9,9 @@ window.addEventListener('resize', function (event) {
 var config = {
   type: Phaser.AUTO,
   width: '100vw',
-  height: '100vh',
+  height: '100%',
   backgroundColor: '#F7E093',
+  margin: 'none',
   scale: {
     mode: Phaser.Scale.RESIZE,
     autoCenter: Phaser.Scale.CENTER_BOTH
