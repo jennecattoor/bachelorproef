@@ -2,7 +2,9 @@ import 'phaser'
 
 let mole1, mole2, mole3, mole4, mole5, mole6;
 let spawnSpeed = 2000;
+let moleTimeUp = 2500
 let molesUp = [];
+let scale;
 
 class Game extends Phaser.Scene {
     constructor() {
@@ -15,6 +17,7 @@ class Game extends Phaser.Scene {
         this.load.image('mask-top', './src/assets/images/mask-top.png');
         this.load.image('mask-bottem', './src/assets/images/mask-bottem.png');
         this.load.image('mole', './src/assets/images/mole.png');
+        this.load.image('hit', './src/assets/images/hit.png');
     }
 
 
@@ -27,7 +30,7 @@ class Game extends Phaser.Scene {
         let background = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'background')
         let scaleX = this.cameras.main.width / background.width
         let scaleY = this.cameras.main.height / background.height
-        let scale = Math.max(scaleX, scaleY)
+        scale = Math.max(scaleX, scaleY)
         background.setScale(scale).setScrollFactor(0)
 
         // Playing the audio
@@ -82,34 +85,37 @@ class Game extends Phaser.Scene {
     }
 
     keyboardInput = (event) => {
-        if (event.key == 'w' && molesUp.includes(mole1)) {
-            this.moveMoleBack(mole1)
+        if (event.key == 'w') {
+            this.hitMole(mole1)
         }
-        if (event.key == 'x' && molesUp.includes(mole2)) {
-            this.moveMoleBack(mole2)
+        if (event.key == 'x') {
+            this.hitMole(mole2)
         }
-        if (event.key == 'c' && molesUp.includes(mole3)) {
-            this.moveMoleBack(mole3)
+        if (event.key == 'c') {
+            this.hitMole(mole3)
         }
-        if (event.key == 'v' && molesUp.includes(mole4)) {
-            this.moveMoleBack(mole4)
+        if (event.key == 'v') {
+            this.hitMole(mole4)
         }
-        if (event.key == 'b' && molesUp.includes(mole5)) {
-            this.moveMoleBack(mole5)
+        if (event.key == 'b') {
+            this.hitMole(mole5)
         }
-        if (event.key == 'n' && molesUp.includes(mole6)) {
-            this.moveMoleBack(mole6)
+        if (event.key == 'n') {
+            this.hitMole(mole6)
         }
     }
 
     hitMole = (moleNr) => {
-        console.log('mole hit')
         if (molesUp.includes(moleNr)) {
             this.moveMoleBack(moleNr)
+            let hit = this.add.image(moleNr.x - 80, moleNr.y - 70, 'hit')
+            hit.setScale(scale).setScrollFactor(0)
+            this.time.delayedCall(300, () => { hit.destroy(); }, [], this);
         }
     }
 
     moveMoleBack = (moleNr) => {
+        // moleTimeUp.reset()
         molesUp = molesUp.filter(mole => mole != moleNr)
         let tween = this.tweens.add({
             y: moleNr.y + 150,
@@ -133,6 +139,7 @@ class Game extends Phaser.Scene {
                 tween.remove();
             }
         })
+        // moleTimeUp = this.time.delayedCall(3000, () => this.moveMoleBack(moleNr), this);
     }
 
     spawnMoles = () => {
@@ -141,6 +148,10 @@ class Game extends Phaser.Scene {
             let randomMole = Math.floor(Math.random() * 6);
             while (molesUp.includes(moles[randomMole])) {
                 randomMole = Math.floor(Math.random() * 6);
+                if (molesUp.length === moles.length) {
+                    this.cameras.main.shake(500);
+                    return
+                }
             }
             this.moveMole(moles[randomMole])
         }, spawnSpeed)
