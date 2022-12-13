@@ -37,8 +37,8 @@ class Game extends Phaser.Scene {
         background.setScale(scale).setScrollFactor(0)
 
         // Points text
-        this.scoreText = this.add.text(20, 20, '0 Points', { fontFamily: 'Arial, Georgia, "Goudy Bookletter 1911", serif', color: '#282828', fontSize: '6rem' });
-        this.lives = this.add.text(this.cameras.main.width - 220, 20, '3 Lives', { fontFamily: 'Arial, Georgia, "Goudy Bookletter 1911", serif', color: '#282828', fontSize: '6rem' });
+        this.scoreText = this.add.text(20, 20, '0 Points', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '8rem' });
+        this.lives = this.add.text(this.cameras.main.width - 220, 20, '3 Lives', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '8rem' });
 
         // Playing the audio
         let audio = this.sound.add('assignment');
@@ -168,10 +168,6 @@ class Game extends Phaser.Scene {
             let randomMole = Math.floor(Math.random() * 6);
             while (molesAnimated.includes(moles[randomMole])) {
                 randomMole = Math.floor(Math.random() * 6);
-                if (molesAnimated.length === moles.length) {
-                    this.cameras.main.shake(500);
-                    return
-                }
             }
             this.moveMole(moles[randomMole])
             molesAnimated.push(moles[randomMole])

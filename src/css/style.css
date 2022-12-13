@@ -1,11 +1,11 @@
 @font-face {
-  font-family: Dia;
-  src: './assets/font/Dia.otf';
+  font-family: Roadstore;
+  src: url('../assets/font/roadstore.woff2');
 }
 
 html {
   box-sizing: border-box;
-  font-family: Dia, Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-family: roadstore, Inter, Avenir, Helvetica, Arial, sans-serif;
   color: var(--color-black);
 }
 
