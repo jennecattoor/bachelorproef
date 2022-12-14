@@ -158,6 +158,8 @@ class Game extends Phaser.Scene {
             this.lives.setText(lives + ' Lives');
             if (lives === 0) {
                 this.cameras.main.shake(500);
+                this.cameras.main.fadeOut(500);
+                setTimeout(() => { this.scene.start('points', { points: points }) }, 500);
             }
         }
     }
