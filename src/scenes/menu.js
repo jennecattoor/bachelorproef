@@ -1,7 +1,6 @@
 import 'phaser'
 
 let scale
-let video
 
 class Menu extends Phaser.Scene {
     constructor() {
@@ -28,39 +27,22 @@ class Menu extends Phaser.Scene {
         let titleSmall = this.add.text(this.cameras.main.width / 2, 300, 'Wilde Westen Edition', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '8.6rem' });
         titleSmall.setOrigin(0.5, 0).setScrollFactor(0);
 
-        this.add.image(this.cameras.main.width / 2 - 300, this.cameras.main.height / 1.7, 'singleplayer').setScale(.8);
-        this.add.image(this.cameras.main.width / 2 + 300, this.cameras.main.height / 1.7, 'multiplayer').setScale(.8);
+        this.add.image(this.cameras.main.width / 2 - 300, this.cameras.main.height / 2, 'singleplayer').setScale(.8);
+        this.add.image(this.cameras.main.width / 2 + 300, this.cameras.main.height / 2, 'multiplayer').setScale(.8);
 
-        this.add.text(this.cameras.main.width / 2, this.cameras.main.height - 200, 'Smash Red for Single Player', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '4rem' }).setOrigin(0.5, 0).setScrollFactor(0);
-        this.add.text(this.cameras.main.width / 2, this.cameras.main.height - 150, 'Smash Yellow for 2 players', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '4rem' }).setOrigin(0.5, 0).setScrollFactor(0);
+        this.add.text(this.cameras.main.width / 2, this.cameras.main.height - 300, 'Smash Red for Single Player', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '4rem' }).setOrigin(0.5, 0).setScrollFactor(0);
+        this.add.text(this.cameras.main.width / 2, this.cameras.main.height - 250, 'Smash Yellow for 2 players', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '4rem' }).setOrigin(0.5, 0).setScrollFactor(0);
 
         this.input.keyboard.on('keyup', (e) => {
+            this.cameras.main.fadeOut(500);
             if (e.key == 'w') {
-                this.startGame();
+                setTimeout(() => { this.scene.start("video") }, 500);
+
             }
             if (e.key == 'x') {
-                this.scene.start("game")
+                setTimeout(() => { this.scene.start("game") }, 500);
             }
         });
-    }
-
-    startGame() {
-        this.cameras.main.fadeOut(1000);
-        setTimeout(() => {
-            this.cameras.main.fadeIn(200);
-            video = this.add.video(this.cameras.main.width / 2, this.cameras.main.height / 2, 'intro');
-            video.setScale(scale).setScrollFactor(0)
-            video.play(true);
-            setTimeout(() => {
-                this.cameras.main.fadeOut(100);
-                video.destroy()
-                this.scene.start("game")
-            }, 21000);
-        }, 2000);
-    }
-
-    update() {
-
     }
 }
 
