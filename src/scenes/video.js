@@ -9,6 +9,10 @@ class Video extends Phaser.Scene {
         super("video");
     }
 
+    preload() {
+        this.load.image('smashgreen', './src/assets/images/green.png');
+    }
+
     create() {
         this.cameras.main.fadeIn(1000);
         video = this.add.video(this.cameras.main.width / 2, this.cameras.main.height / 2, 'intro', false);
@@ -17,6 +21,8 @@ class Video extends Phaser.Scene {
         scale = Math.max(scaleX, scaleY)
         video.setScale(scale).setScrollFactor(0)
         video.play(true);
+
+        this.add.image(150, 150, 'smashgreen').setScale(.5).setScrollFactor(0);
 
         setTimeout(() => { video.destroy() }, 20500);
 

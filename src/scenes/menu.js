@@ -15,7 +15,7 @@ class Menu extends Phaser.Scene {
     }
 
     create() {
-
+        this.cameras.main.fadeIn(500);
         let background = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'background-blurred').setAlpha(.3)
         let scaleX = this.cameras.main.width / background.width
         let scaleY = this.cameras.main.height / background.height
@@ -37,6 +37,7 @@ class Menu extends Phaser.Scene {
         this.input.keyboard.on('keyup', (e) => {
             if (e.key == 'w') {
                 this.cameras.main.fadeOut(500);
+                // this.time.delayedCall(500, () => { this.scene.start("video") }, [], this);
                 setTimeout(() => { this.scene.start("video") }, 500);
             }
             if (e.key == 'c') {

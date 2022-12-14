@@ -6,7 +6,7 @@
 html {
   box-sizing: border-box;
   font-family: roadstore, Inter, Arial,;
-  color: var(--color-black);
+  background-color: black;
 }
 
 *,

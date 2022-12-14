@@ -50,12 +50,10 @@ class Points extends Phaser.Scene {
             titleSmall.setText('Outstanding');
         }
 
-        setTimeout(() => {
+        this.time.delayedCall(7500, () => {
             this.cameras.main.fadeOut(500);
-            setTimeout(() => {
-                this.scene.start("menu");
-            }, 500);
-        }, 9000);
+            this.time.delayedCall(500, () => { location.reload() }, [], this);
+        }, [], this);
     }
 
     update() {

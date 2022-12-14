@@ -45,7 +45,7 @@ class Solo extends Phaser.Scene {
         setTimeout(() => { instruction.setVisible(false) }, 4500);
 
         // Points text
-        this.scoreText = this.add.text(20, 20, '0 Points', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '8rem' });
+        this.scoreText = this.add.text(30, 30, '0 Points', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '10rem' });
 
         // Show the hearts
         heartOne = this.add.image(this.cameras.main.width - 400 + 0, 100, 'heart').setScale(0.5).setScrollFactor(0)
@@ -53,7 +53,7 @@ class Solo extends Phaser.Scene {
         heartThree = this.add.image(this.cameras.main.width - 400 + 300, 100, 'heart').setScale(0.5).setScrollFactor(0)
 
         // Speed text
-        speedText = this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2 - 400, 'They are getting faster!', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '10rem' }).setOrigin(0.5, 0).setScrollFactor(0).setVisible(false);
+        speedText = this.add.text(this.cameras.main.width / 2, this.cameras.main.height - 200, 'They are getting faster!', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '10rem' }).setOrigin(0.5, 0).setScrollFactor(0).setVisible(false);
 
         // Playing the audio
         let audio = this.sound.add('assignment');
@@ -210,7 +210,9 @@ class Solo extends Phaser.Scene {
             if (lives === 0) {
                 this.cameras.main.shake(500);
                 this.cameras.main.fadeOut(500);
-                setTimeout(() => { this.scene.start('points', { points: points }) }, 500);
+                setTimeout(() => {
+                    this.scene.start('points', { points: points })
+                }, 500);
             }
         }
     }
