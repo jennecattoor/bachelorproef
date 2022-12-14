@@ -7,6 +7,10 @@ let molesUp = [];
 let molesAnimated = [];
 let scale;
 let points = 0
+let interval
+let increasedSpeed = false
+let speedText
+let heartOne, heartTwo, heartThree;
 
 class Game extends Phaser.Scene {
     constructor() {
@@ -27,7 +31,6 @@ class Game extends Phaser.Scene {
     create() {
         // Fading in camera
         this.cameras.main.fadeIn(4000);
-        // this.add.text(0, 0, 'You need to make sure that the moles cant steal the guitar', { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
 
         //Setting the background
         let background = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'background')
@@ -36,9 +39,21 @@ class Game extends Phaser.Scene {
         scale = Math.max(scaleX, scaleY)
         background.setScale(scale).setScrollFactor(0)
 
+
+        // Instruction text
+        let instruction = this.add.text(this.cameras.main.width / 2, this.cameras.main.height - 100, 'You need to make sure that the moles cant steal the guitar', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '5rem' }).setOrigin(0.5, 0).setScrollFactor(0);
+        setTimeout(() => { instruction.setVisible(false) }, 4500);
+
         // Points text
         this.scoreText = this.add.text(20, 20, '0 Points', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '8rem' });
-        this.lives = this.add.text(this.cameras.main.width - 220, 20, '3 Lives', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '8rem' });
+
+        // Show the hearts
+        heartOne = this.add.image(this.cameras.main.width - 400 + 0, 100, 'heart').setScale(0.5).setScrollFactor(0)
+        heartTwo = this.add.image(this.cameras.main.width - 400 + 150, 100, 'heart').setScale(0.5).setScrollFactor(0)
+        heartThree = this.add.image(this.cameras.main.width - 400 + 300, 100, 'heart').setScale(0.5).setScrollFactor(0)
+
+        // Speed text
+        speedText = this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2 - 400, 'They are getting faster!', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '10rem' }).setOrigin(0.5, 0).setScrollFactor(0).setVisible(false);
 
         // Playing the audio
         let audio = this.sound.add('assignment');
@@ -84,7 +99,7 @@ class Game extends Phaser.Scene {
         mole6.setScale(scale).setScrollFactor(0)
         mole6.setMask(maskBottem);
 
-        setTimeout(() => { this.spawnMoles() }, 3000)
+        setTimeout(() => { interval = setInterval(() => { this.spawnMole() }, spawnSpeed) }, 5000)
 
         // Listening to keys
         this.input.keyboard.on('keyup', (e) => this.keyboardInput(e));
@@ -109,6 +124,43 @@ class Game extends Phaser.Scene {
         }
         if (event.key == 'n') {
             this.hitMole(mole6)
+        }
+    }
+
+    showHearts = (lives) => {
+        console.log(lives)
+        if (lives == 2) {
+            this.tweens.add({
+                scale: 0,
+                targets: heartOne,
+                ease: "Power1",
+                duration: 250,
+                onComplete: () => {
+                    heartOne.destroy()
+                }
+            })
+        }
+        if (lives == 1) {
+            this.tweens.add({
+                scale: 0,
+                targets: heartTwo,
+                ease: "Power1",
+                duration: 250,
+                onComplete: () => {
+                    heartOne.destroy()
+                }
+            })
+        }
+        if (lives == 0) {
+            this.tweens.add({
+                scale: 0,
+                targets: heartThree,
+                ease: "Power1",
+                duration: 250,
+                onComplete: () => {
+                    heartOne.destroy()
+                }
+            })
         }
     }
 
@@ -138,13 +190,13 @@ class Game extends Phaser.Scene {
     }
 
     moveMole = (moleNr) => {
-        molesUp.push(moleNr)
         let tween = this.tweens.add({
             y: moleNr.y - 150,
             targets: moleNr,
             ease: "Power1",
             duration: 250,
             onComplete: () => {
+                molesUp.push(moleNr)
                 tween.remove();
             }
         })
@@ -155,7 +207,7 @@ class Game extends Phaser.Scene {
         if (molesUp.includes(moleNr)) {
             this.moveMoleBack(moleNr)
             lives--;
-            this.lives.setText(lives + ' Lives');
+            this.showHearts(lives)
             if (lives === 0) {
                 this.cameras.main.shake(500);
                 this.cameras.main.fadeOut(500);
@@ -164,21 +216,53 @@ class Game extends Phaser.Scene {
         }
     }
 
-    spawnMoles = () => {
+    spawnMole = () => {
         const moles = [mole1, mole2, mole3, mole4, mole5, mole6]
-        setInterval(() => {
-            let randomMole = Math.floor(Math.random() * 6);
-            while (molesAnimated.includes(moles[randomMole])) {
-                randomMole = Math.floor(Math.random() * 6);
-            }
-            this.moveMole(moles[randomMole])
-            molesAnimated.push(moles[randomMole])
-        }, spawnSpeed)
-        // game.time.events.loop(Phaser.Timer.SECOND, this.addMonster, this);
-
+        let randomMole = Math.floor(Math.random() * 6);
+        while (molesAnimated.includes(moles[randomMole])) {
+            randomMole = Math.floor(Math.random() * 6);
+        }
+        this.moveMole(moles[randomMole])
+        molesAnimated.push(moles[randomMole])
     }
 
     update() {
+        if (points === 12 && increasedSpeed === false) {
+            increasedSpeed = true
+            clearInterval(interval)
+            interval = setInterval(() => { this.spawnMole() }, spawnSpeed - 300)
+            speedText.setVisible(true)
+        } else if (points === 13) {
+            increasedSpeed = false
+            speedText.setVisible(false)
+        }
+        if (points === 24 && increasedSpeed === false) {
+            increasedSpeed = true
+            clearInterval(interval)
+            interval = setInterval(() => { this.spawnMole() }, spawnSpeed - 500)
+            speedText.setVisible(true)
+        } else if (points === 25) {
+            increasedSpeed = false
+            speedText.setVisible(false)
+        }
+        if (points === 36 && increasedSpeed === false) {
+            increasedSpeed = true
+            clearInterval(interval)
+            interval = setInterval(() => { this.spawnMole() }, spawnSpeed - 800)
+            speedText.setVisible(true)
+        } else if (points === 37) {
+            increasedSpeed = false
+            speedText.setVisible(false)
+        }
+        if (points === 48 && increasedSpeed === false) {
+            increasedSpeed = true
+            clearInterval(interval)
+            interval = setInterval(() => { this.spawnMole() }, spawnSpeed - 1000)
+            speedText.setVisible(true)
+        } else if (points === 49) {
+            increasedSpeed = false
+            speedText.setVisible(false)
+        }
     }
 }
 
