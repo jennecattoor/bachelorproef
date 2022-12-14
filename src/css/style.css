@@ -5,7 +5,7 @@
 
 html {
   box-sizing: border-box;
-  font-family: roadstore, Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-family: roadstore, Inter, Arial,;
   color: var(--color-black);
 }
 
@@ -21,16 +21,8 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
-
-  --color-white: white;
-  --color-black: #282828;
-  --color-green: #697D43;
 }
 
 body {
   overflow: hidden;
-}
-
-.hidden {
-  display: none;
 }

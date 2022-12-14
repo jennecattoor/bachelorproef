@@ -36,16 +36,16 @@ class Points extends Phaser.Scene {
         let three = this.sound.add('three');
         let four = this.sound.add('four');
 
-        if (points <= 20) {
+        if (points <= 16) {
             one.play();
             titleSmall.setText('Did you even try?');
-        } else if (points <= 40) {
+        } else if (points <= 36) {
             two.play();
             titleSmall.setText('Could be better');
-        } else if (points <= 60) {
+        } else if (points <= 48) {
             three.play();
             titleSmall.setText('Great work');
-        } else if (points <= 80) {
+        } else if (points <= 60) {
             four.play();
             titleSmall.setText('Outstanding');
         }

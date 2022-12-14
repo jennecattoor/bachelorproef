@@ -12,9 +12,9 @@ let increasedSpeed = false
 let speedText
 let heartOne, heartTwo, heartThree;
 
-class Game extends Phaser.Scene {
+class Solo extends Phaser.Scene {
     constructor() {
-        super("game");
+        super("solo");
     }
 
     preload() {
@@ -128,7 +128,6 @@ class Game extends Phaser.Scene {
     }
 
     showHearts = (lives) => {
-        console.log(lives)
         if (lives == 2) {
             this.tweens.add({
                 scale: 0,
@@ -263,7 +262,16 @@ class Game extends Phaser.Scene {
             increasedSpeed = false
             speedText.setVisible(false)
         }
+        if (points === 64 && increasedSpeed === false) {
+            increasedSpeed = true
+            clearInterval(interval)
+            interval = setInterval(() => { this.spawnMole() }, spawnSpeed - 1350)
+            speedText.setVisible(true)
+        } else if (points === 65) {
+            increasedSpeed = false
+            speedText.setVisible(false)
+        }
     }
 }
 
-export default Game
+export default Solo

@@ -15,6 +15,7 @@ class Menu extends Phaser.Scene {
     }
 
     create() {
+
         let background = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'background-blurred').setAlpha(.3)
         let scaleX = this.cameras.main.width / background.width
         let scaleY = this.cameras.main.height / background.height
@@ -34,13 +35,13 @@ class Menu extends Phaser.Scene {
         this.add.text(this.cameras.main.width / 2, this.cameras.main.height - 250, 'Smash Yellow for 2 players', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '4rem' }).setOrigin(0.5, 0).setScrollFactor(0);
 
         this.input.keyboard.on('keyup', (e) => {
-            this.cameras.main.fadeOut(500);
             if (e.key == 'w') {
+                this.cameras.main.fadeOut(500);
                 setTimeout(() => { this.scene.start("video") }, 500);
-
             }
-            if (e.key == 'x') {
-                setTimeout(() => { this.scene.start("game") }, 500);
+            if (e.key == 'c') {
+                this.cameras.main.fadeOut(500);
+                setTimeout(() => { this.scene.start("duo") }, 500);
             }
         });
     }
