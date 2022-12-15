@@ -5,6 +5,7 @@ let timerText
 let RedMole1, RedMole2, RedMole3, RedMole4, RedMole5, RedMole6, BlueMole1, BlueMole2, BlueMole3, BlueMole4, BlueMole5, BlueMole6;
 let spawnSpeed = 1000;
 let interval
+let initialTime = 10;
 let molesAnimated = [];
 let molesUp = [];
 let previousMoleRed = false
@@ -129,7 +130,6 @@ class Duo extends Phaser.Scene {
     hitMole = (holeNr) => {
         const redMoles = [RedMole1, RedMole2, RedMole3, RedMole4, RedMole5, RedMole6]
         const blueMoles = [BlueMole1, BlueMole2, BlueMole3, BlueMole4, BlueMole5, BlueMole6]
-        console.log(molesUp)
         if (molesUp.includes(redMoles[holeNr])) {
             scoreBlue++;
             scoreTextBlue.setText(scoreBlue + ' Points');
@@ -202,12 +202,13 @@ class Duo extends Phaser.Scene {
     }
 
     timer() {
-        this.initialTime = 90;
         let timerInterval = setInterval(() => {
-            this.initialTime -= 1;
-            timerText.setText(this.formatTime(this.initialTime));
-            if (this.initialTime <= 0) {
+            initialTime -= 1;
+            timerText.setText(this.formatTime(initialTime));
+            if (initialTime <= 0) {
                 clearInterval(timerInterval)
+                this.cameras.main.fadeOut(500);
+                this.time.delayedCall(500, () => { this.scene.start('results', { scoreRed: scoreRed, scoreBlue: scoreBlue }) }, [], this);
                 return
             }
         }, 1000);

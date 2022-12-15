@@ -5,6 +5,7 @@ import Instructions from './scenes/instructions'
 import Duo from './scenes/duo'
 import Solo from './scenes/solo'
 import Points from './scenes/points'
+import Results from './scenes/results'
 
 window.addEventListener('resize', function () {
   window.location.reload();
@@ -20,7 +21,7 @@ var config = {
     mode: Phaser.Scale.RESIZE,
     autoCenter: Phaser.Scale.CENTER_BOTH
   },
-  scene: [Menu, Video, Solo, Instructions, Duo, Points]
+  scene: [Menu, Video, Solo, Instructions, Duo, Points, Results]
 };
 
 new Phaser.Game(config);

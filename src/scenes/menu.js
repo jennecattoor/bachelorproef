@@ -42,7 +42,7 @@ class Menu extends Phaser.Scene {
             }
             if (e.key == 'c') {
                 this.cameras.main.fadeOut(500);
-                setTimeout(() => { this.scene.start("duo") }, 500);
+                setTimeout(() => { this.scene.start("instructions") }, 500);
             }
         });
     }
