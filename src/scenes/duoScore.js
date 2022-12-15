@@ -20,17 +20,21 @@ class DuoScore extends Phaser.Scene {
     }
 
     create() {
+        // Fade in
         this.cameras.main.fadeIn(500);
 
+        // Background
         let background = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'background-blurred')
         let scaleX = this.cameras.main.width / background.width
         let scaleY = this.cameras.main.height / background.height
         scale = Math.max(scaleX, scaleY)
         background.setScale(scale).setScrollFactor(0)
 
-        // Versus
+        // Versus image
         this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'VS').setAlpha(.7).setScale(scale).setScrollFactor(0)
-        let winnerText = this.add.text(this.cameras.main.width / 2, this.cameras.main.height - 200, '', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '10rem' }).setOrigin(0.5, 0).setScrollFactor(0);
+
+        // Winner text and sound
+        let winnerText = this.add.text(this.cameras.main.width / 2, this.cameras.main.height - 200, '', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '14rem' }).setOrigin(0.5, 0).setScrollFactor(0);
 
         if (scoreRed > scoreBlue) {
             winnerText.setText('Team Red wins!')
@@ -49,7 +53,7 @@ class DuoScore extends Phaser.Scene {
         this.add.image(this.cameras.main.width / 4 * 3, this.cameras.main.height / 2, 'mole-blue').setScale(scale).setScrollFactor(0);
         this.add.image(this.cameras.main.width / 4 * 1, this.cameras.main.height / 2, 'mole-red').setScale(scale).setScrollFactor(0);
 
-        // Mole texts
+        // Moints text
         this.add.text(this.cameras.main.width / 4 * 3, this.cameras.main.height / 2 + 180, scoreBlue + ' Points', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '10rem' }).setOrigin(0.5, .5).setScrollFactor(0);
         this.add.text(this.cameras.main.width / 4 * 1, this.cameras.main.height / 2 + 180, scoreRed + ' Points', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '10rem' }).setOrigin(0.5, .5).setScrollFactor(0);
 
@@ -57,7 +61,6 @@ class DuoScore extends Phaser.Scene {
             this.cameras.main.fadeOut(300);
             this.time.delayedCall(300, () => { location.reload() }, [], this);
         }, [], this);
-
     }
 
     update() {

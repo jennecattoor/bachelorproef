@@ -1,18 +1,21 @@
 import 'phaser'
 
 let scale;
-let timerText
-let RedMole1, RedMole2, RedMole3, RedMole4, RedMole5, RedMole6, BlueMole1, BlueMole2, BlueMole3, BlueMole4, BlueMole5, BlueMole6;
-let spawnSpeed = 1000;
-let interval
-let initialTime = 90;
-let molesAnimated = [];
-let molesUp = [];
-let previousMoleRed = false
-let scoreRed = 0;
-let scoreBlue = 0;
+let timerText;
+let interval;
+let speedText;
 let scoreTextRed;
 let scoreTextBlue;
+let scoreRed = 0;
+let scoreBlue = 0;
+let initialTime = 75;
+let spawnSpeed = 1000;
+let checkMoleSpeed = 2000;
+let molesAnimated = [];
+let molesUp = [];
+let increasedSpeed = false;
+let previousMoleRed = false;
+let RedMole1, RedMole2, RedMole3, RedMole4, RedMole5, RedMole6, BlueMole1, BlueMole2, BlueMole3, BlueMole4, BlueMole5, BlueMole6;
 
 class Duo extends Phaser.Scene {
     constructor() {
@@ -32,6 +35,7 @@ class Duo extends Phaser.Scene {
     create() {
         // Camera fade in
         this.cameras.main.fadeIn(500)
+
         // Background
         let background = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'background')
         let scaleX = this.cameras.main.width / background.width
@@ -49,11 +53,14 @@ class Duo extends Phaser.Scene {
         scoreTextBlue = this.add.text(this.cameras.main.width - 30, 30, '0 Points', { fontFamily: 'roadstore, Arial', color: '#1932d2', fontSize: '10rem' }).setOrigin(1, 0);
 
         // Timer
-        timerText = this.add.text(this.cameras.main.width / 2, 30, '1:30', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '10rem' }).setOrigin(0.5, 0);
+        timerText = this.add.text(this.cameras.main.width / 2, 30, '1:15', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '10rem' }).setOrigin(0.5, 0);
         this.time.delayedCall(6000, this.timer, [], this);
 
+        // Speed text
+        speedText = this.add.text(this.cameras.main.width / 2, this.cameras.main.height - 200, 'They are speeding up!', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '10rem' }).setOrigin(0.5, 0).setScrollFactor(0).setVisible(false);
+
         // Moles
-        // Creating the mask from the top
+        // Creating the mask for the top
         let maskShapeTop = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'mask-top').setVisible(false).setScale(scale).setScrollFactor(0);
         let maskTop = maskShapeTop.createBitmapMask();
 
@@ -61,7 +68,6 @@ class Duo extends Phaser.Scene {
         let maskShapeBottem = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'mask-bottem').setVisible(false).setScale(scale).setScrollFactor(0);
         let maskBottem = maskShapeBottem.createBitmapMask();
 
-        // Red moles
         // Red mole 1
         RedMole1 = this.add.image(window.innerWidth / 3.55, window.innerHeight / 1.88, 'mole-red').setScale(scale).setScrollFactor(0).setMask(maskTop);
 
@@ -80,8 +86,7 @@ class Duo extends Phaser.Scene {
         // Red mole 6
         RedMole6 = this.add.image(window.innerWidth / 1.35, window.innerHeight / 1.27, 'mole-red').setScale(scale).setScrollFactor(0).setMask(maskBottem);
 
-        // Blue moles
-        // Mole 1 (Red) Blue mole
+        // Blue mole 1
         BlueMole1 = this.add.image(window.innerWidth / 3.55, window.innerHeight / 1.88, 'mole-blue').setScale(scale).setScrollFactor(0).setMask(maskTop);
 
         // Blue mole 2
@@ -130,6 +135,7 @@ class Duo extends Phaser.Scene {
     hitMole = (holeNr) => {
         const redMoles = [RedMole1, RedMole2, RedMole3, RedMole4, RedMole5, RedMole6]
         const blueMoles = [BlueMole1, BlueMole2, BlueMole3, BlueMole4, BlueMole5, BlueMole6]
+
         if (molesUp.includes(redMoles[holeNr])) {
             scoreBlue++;
             scoreTextBlue.setText(scoreBlue + ' Points');
@@ -173,7 +179,7 @@ class Duo extends Phaser.Scene {
                 tween.remove();
             }
         })
-        this.time.delayedCall(2000, () => { this.checkMoleTime(moleMoved); }, [], this);
+        this.time.delayedCall(checkMoleSpeed, () => { this.checkMoleTime(moleMoved); }, [], this);
     }
 
     checkMoleTime = (mole) => {
@@ -208,7 +214,10 @@ class Duo extends Phaser.Scene {
             if (initialTime <= 0) {
                 clearInterval(timerInterval)
                 this.cameras.main.fadeOut(500);
-                this.time.delayedCall(500, () => { this.scene.start('duoScore', { scoreRed: scoreRed, scoreBlue: scoreBlue }) }, [], this);
+                this.time.delayedCall(500, () => {
+                    this.scene.remove()
+                    this.scene.start('duoScore', { scoreRed: scoreRed, scoreBlue: scoreBlue })
+                }, [], this);
                 return
             }
         }, 1000);
@@ -219,6 +228,19 @@ class Duo extends Phaser.Scene {
         var partInSeconds = seconds % 60;
         partInSeconds = partInSeconds.toString().padStart(2, '0');
         return `${minutes}:${partInSeconds}`;
+    }
+
+    update() {
+        if (initialTime === 45 && increasedSpeed === false) {
+            increasedSpeed = true
+            clearInterval(interval)
+            checkMoleSpeed = 1750
+            interval = setInterval(() => { this.spawnMole() }, spawnSpeed - 250)
+            speedText.setVisible(true)
+        } else if (initialTime === 32) {
+            increasedSpeed = false
+            speedText.setVisible(false)
+        }
     }
 }
 

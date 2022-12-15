@@ -1,16 +1,16 @@
 import 'phaser'
 
-let mole1, mole2, mole3, mole4, mole5, mole6;
-let spawnSpeed = 2000;
+let scale;
+let interval
+let speedText
+let points = 0
 let lives = 3;
+let spawnSpeed = 2000;
 let molesUp = [];
 let molesAnimated = [];
-let scale;
-let points = 0
-let interval
 let increasedSpeed = false
-let speedText
 let heartOne, heartTwo, heartThree;
+let mole1, mole2, mole3, mole4, mole5, mole6;
 
 class Solo extends Phaser.Scene {
     constructor() {
@@ -38,7 +38,6 @@ class Solo extends Phaser.Scene {
         let scaleY = this.cameras.main.height / background.height
         scale = Math.max(scaleX, scaleY)
         background.setScale(scale).setScrollFactor(0)
-
 
         // Instruction text
         let instruction = this.add.text(this.cameras.main.width / 2, this.cameras.main.height - 100, `You need to make sure that the moles can't steal the guitar`, { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '5rem' }).setOrigin(0.5, 0).setScrollFactor(0);
@@ -69,37 +68,26 @@ class Solo extends Phaser.Scene {
         maskShapeBottem.setScale(scale).setScrollFactor(0)
         let maskBottem = maskShapeBottem.createBitmapMask();
 
-        // Mole 1 (Red)
-        mole1 = this.add.image(window.innerWidth / 3.55, window.innerHeight / 1.88, 'mole');
-        mole1.setScale(scale).setScrollFactor(0)
-        mole1.setMask(maskTop);
+        // Mole 1 (Red hole)
+        mole1 = this.add.image(window.innerWidth / 3.55, window.innerHeight / 1.88, 'mole').setScale(scale).setScrollFactor(0).setMask(maskTop);
 
-        // Mole 2 (Orange)
-        mole2 = this.add.image(window.innerWidth / 2, window.innerHeight / 1.75, 'mole');
-        mole2.setScale(scale).setScrollFactor(0)
-        mole2.setMask(maskTop);
+        // Mole 2 (Orange hole)
+        mole2 = this.add.image(window.innerWidth / 2, window.innerHeight / 1.75, 'mole').setScale(scale).setScrollFactor(0).setMask(maskTop);
 
-        // Mole 3 (Yellow)
-        mole3 = this.add.image(window.innerWidth / 1.44, window.innerHeight / 1.75, 'mole');
-        mole3.setScale(scale).setScrollFactor(0)
-        mole3.setMask(maskTop);
+        // Mole 3 (Yellow hole)
+        mole3 = this.add.image(window.innerWidth / 1.44, window.innerHeight / 1.75, 'mole').setScale(scale).setScrollFactor(0).setMask(maskTop);
 
-        // Mole 4 (Green)
-        mole4 = this.add.image(window.innerWidth / 4.18, window.innerHeight / 1.3, 'mole');
-        mole4.setScale(scale).setScrollFactor(0)
-        mole4.setMask(maskBottem);
+        // Mole 4 (Green hole)
+        mole4 = this.add.image(window.innerWidth / 4.18, window.innerHeight / 1.3, 'mole').setScale(scale).setScrollFactor(0).setMask(maskBottem);
 
-        // Mole 5 (Blue)
-        mole5 = this.add.image(window.innerWidth / 1.96, window.innerHeight / 1.3, 'mole');
-        mole5.setScale(scale).setScrollFactor(0)
-        mole5.setMask(maskBottem);
+        // Mole 5 (Blue hole)
+        mole5 = this.add.image(window.innerWidth / 1.96, window.innerHeight / 1.3, 'mole').setScale(scale).setScrollFactor(0).setMask(maskBottem);
 
-        // Mole 6 (Blue)
-        mole6 = this.add.image(window.innerWidth / 1.35, window.innerHeight / 1.27, 'mole');
-        mole6.setScale(scale).setScrollFactor(0)
-        mole6.setMask(maskBottem);
+        // Mole 6 (Purple hole)
+        mole6 = this.add.image(window.innerWidth / 1.35, window.innerHeight / 1.27, 'mole').setScale(scale).setScrollFactor(0).setMask(maskBottem);
 
-        setTimeout(() => { interval = setInterval(() => { this.spawnMole() }, spawnSpeed) }, 5000)
+        // Setting up interval after 5 seconds
+        this.time.delayedCall(5000, () => { interval = setInterval(() => { this.spawnMole() }, spawnSpeed) }, [], this);
 
         // Listening to keys
         this.input.keyboard.on('keyup', (e) => this.keyboardInput(e));
