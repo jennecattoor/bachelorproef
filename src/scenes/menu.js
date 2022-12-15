@@ -45,11 +45,18 @@ class Menu extends Phaser.Scene {
         this.input.keyboard.on('keyup', (e) => {
             if (e.key == 'w') {
                 this.cameras.main.fadeOut(500);
-                this.time.delayedCall(500, () => { this.scene.start("soloIntro") }, [], this);
+                this.time.delayedCall(500, () => {
+                    this.scene.remove()
+                    this.scene.start("soloIntro")
+                }
+                    , [], this);
             }
             if (e.key == 'c') {
                 this.cameras.main.fadeOut(500);
-                this.time.delayedCall(500, () => { this.scene.start("duoIntro") }, [], this);
+                this.time.delayedCall(500, () => {
+                    this.scene.remove()
+                    this.scene.start("duoIntro")
+                }, [], this);
             }
         });
     }

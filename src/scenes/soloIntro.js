@@ -44,7 +44,10 @@ class SoloIntro extends Phaser.Scene {
             if (startGame == false) {
                 startGame = true
                 this.cameras.main.fadeOut(500);
-                setTimeout(() => { this.scene.start("solo") }, 500);
+                setTimeout(() => {
+                    // this.scene.remove()
+                    this.scene.start("solo")
+                }, 500);
             }
         }
     }

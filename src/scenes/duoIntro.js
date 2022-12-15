@@ -46,7 +46,10 @@ class DuoIntro extends Phaser.Scene {
         // Start game
         this.time.delayedCall(5500, () => {
             this.cameras.main.fadeOut(500)
-            this.time.delayedCall(500, () => { this.scene.start('duo') }, [], this);
+            this.time.delayedCall(500, () => {
+                this.scene.remove()
+                this.scene.start('duo')
+            }, [], this);
         }, [], this);
 
     }

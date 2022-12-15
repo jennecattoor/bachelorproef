@@ -58,7 +58,9 @@ class SoloScore extends Phaser.Scene {
         // Restarting game
         this.time.delayedCall(7500, () => {
             this.cameras.main.fadeOut(500);
-            this.time.delayedCall(500, () => { location.reload() }, [], this);
+            this.time.delayedCall(500, () => {
+                location.reload()
+            }, [], this);
         }, [], this);
     }
 
