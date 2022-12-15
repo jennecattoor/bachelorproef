@@ -94,7 +94,7 @@ class Solo extends Phaser.Scene {
         mole5.setScale(scale).setScrollFactor(0)
         mole5.setMask(maskBottem);
 
-        // Mole 5 (Blue)
+        // Mole 6 (Blue)
         mole6 = this.add.image(window.innerWidth / 1.35, window.innerHeight / 1.27, 'mole');
         mole6.setScale(scale).setScrollFactor(0)
         mole6.setMask(maskBottem);
