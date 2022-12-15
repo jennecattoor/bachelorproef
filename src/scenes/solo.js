@@ -12,9 +12,9 @@ let increasedSpeed = false
 let speedText
 let heartOne, heartTwo, heartThree;
 
-class Game extends Phaser.Scene {
+class Solo extends Phaser.Scene {
     constructor() {
-        super("game");
+        super("solo");
     }
 
     preload() {
@@ -41,11 +41,11 @@ class Game extends Phaser.Scene {
 
 
         // Instruction text
-        let instruction = this.add.text(this.cameras.main.width / 2, this.cameras.main.height - 100, 'You need to make sure that the moles cant steal the guitar', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '5rem' }).setOrigin(0.5, 0).setScrollFactor(0);
+        let instruction = this.add.text(this.cameras.main.width / 2, this.cameras.main.height - 100, `You need to make sure that the moles can't steal the guitar`, { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '5rem' }).setOrigin(0.5, 0).setScrollFactor(0);
         setTimeout(() => { instruction.setVisible(false) }, 4500);
 
         // Points text
-        this.scoreText = this.add.text(20, 20, '0 Points', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '8rem' });
+        this.scoreText = this.add.text(30, 30, '0 Points', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '10rem' });
 
         // Show the hearts
         heartOne = this.add.image(this.cameras.main.width - 400 + 0, 100, 'heart').setScale(0.5).setScrollFactor(0)
@@ -53,7 +53,7 @@ class Game extends Phaser.Scene {
         heartThree = this.add.image(this.cameras.main.width - 400 + 300, 100, 'heart').setScale(0.5).setScrollFactor(0)
 
         // Speed text
-        speedText = this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2 - 400, 'They are getting faster!', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '10rem' }).setOrigin(0.5, 0).setScrollFactor(0).setVisible(false);
+        speedText = this.add.text(this.cameras.main.width / 2, this.cameras.main.height - 200, 'They are speeding up!', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '10rem' }).setOrigin(0.5, 0).setScrollFactor(0).setVisible(false);
 
         // Playing the audio
         let audio = this.sound.add('assignment');
@@ -94,7 +94,7 @@ class Game extends Phaser.Scene {
         mole5.setScale(scale).setScrollFactor(0)
         mole5.setMask(maskBottem);
 
-        // Mole 5 (Blue)
+        // Mole 6 (Blue)
         mole6 = this.add.image(window.innerWidth / 1.35, window.innerHeight / 1.27, 'mole');
         mole6.setScale(scale).setScrollFactor(0)
         mole6.setMask(maskBottem);
@@ -128,7 +128,6 @@ class Game extends Phaser.Scene {
     }
 
     showHearts = (lives) => {
-        console.log(lives)
         if (lives == 2) {
             this.tweens.add({
                 scale: 0,
@@ -211,7 +210,9 @@ class Game extends Phaser.Scene {
             if (lives === 0) {
                 this.cameras.main.shake(500);
                 this.cameras.main.fadeOut(500);
-                setTimeout(() => { this.scene.start('points', { points: points }) }, 500);
+                setTimeout(() => {
+                    this.scene.start('points', { points: points })
+                }, 500);
             }
         }
     }
@@ -263,7 +264,16 @@ class Game extends Phaser.Scene {
             increasedSpeed = false
             speedText.setVisible(false)
         }
+        if (points === 64 && increasedSpeed === false) {
+            increasedSpeed = true
+            clearInterval(interval)
+            interval = setInterval(() => { this.spawnMole() }, spawnSpeed - 1350)
+            speedText.setVisible(true)
+        } else if (points === 65) {
+            increasedSpeed = false
+            speedText.setVisible(false)
+        }
     }
 }
 
-export default Game
+export default Solo

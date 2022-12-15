@@ -21,7 +21,7 @@ class Points extends Phaser.Scene {
     }
 
     create() {
-        let background = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'background-blurred').setAlpha(.3)
+        let background = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'background-blurred')
         let scaleX = this.cameras.main.width / background.width
         let scaleY = this.cameras.main.height / background.height
         scale = Math.max(scaleX, scaleY)
@@ -36,26 +36,24 @@ class Points extends Phaser.Scene {
         let three = this.sound.add('three');
         let four = this.sound.add('four');
 
-        if (points <= 20) {
+        if (points <= 16) {
             one.play();
             titleSmall.setText('Did you even try?');
-        } else if (points <= 40) {
+        } else if (points <= 36) {
             two.play();
             titleSmall.setText('Could be better');
-        } else if (points <= 60) {
+        } else if (points <= 48) {
             three.play();
             titleSmall.setText('Great work');
-        } else if (points <= 80) {
+        } else if (points <= 60) {
             four.play();
             titleSmall.setText('Outstanding');
         }
 
-        setTimeout(() => {
+        this.time.delayedCall(7500, () => {
             this.cameras.main.fadeOut(500);
-            setTimeout(() => {
-                this.scene.start("menu");
-            }, 500);
-        }, 9000);
+            this.time.delayedCall(500, () => { location.reload() }, [], this);
+        }, [], this);
     }
 
     update() {
