@@ -5,7 +5,7 @@ let timerText
 let RedMole1, RedMole2, RedMole3, RedMole4, RedMole5, RedMole6, BlueMole1, BlueMole2, BlueMole3, BlueMole4, BlueMole5, BlueMole6;
 let spawnSpeed = 1000;
 let interval
-let initialTime = 10;
+let initialTime = 90;
 let molesAnimated = [];
 let molesUp = [];
 let previousMoleRed = false

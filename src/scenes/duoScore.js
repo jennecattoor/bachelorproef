@@ -2,7 +2,6 @@ import 'phaser'
 
 let scale
 let scoreRed, scoreBlue
-let test = 0
 
 class DuoScore extends Phaser.Scene {
     constructor() {
@@ -32,6 +31,7 @@ class DuoScore extends Phaser.Scene {
         // Versus
         this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'VS').setAlpha(.7).setScale(scale).setScrollFactor(0)
         let winnerText = this.add.text(this.cameras.main.width / 2, this.cameras.main.height - 200, '', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '10rem' }).setOrigin(0.5, 0).setScrollFactor(0);
+
         if (scoreRed > scoreBlue) {
             winnerText.setText('Team Red wins!')
             this.sound.add('redWins').play();
@@ -54,8 +54,8 @@ class DuoScore extends Phaser.Scene {
         this.add.text(this.cameras.main.width / 4 * 1, this.cameras.main.height / 2 + 180, scoreRed + ' Points', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '10rem' }).setOrigin(0.5, .5).setScrollFactor(0);
 
         this.time.delayedCall(4000, () => {
-            this.cameras.main.fadeOut(500);
-            this.time.delayedCall(500, () => { location.reload() }, [], this);
+            this.cameras.main.fadeOut(300);
+            this.time.delayedCall(300, () => { location.reload() }, [], this);
         }, [], this);
 
     }

@@ -13,7 +13,6 @@ class SoloScore extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('background-blurred', './src/assets/images/background-blurred.jpg');
         this.load.audio('one', './src/assets/audio/one.wav');
         this.load.audio('two', './src/assets/audio/two.wav');
         this.load.audio('three', './src/assets/audio/three.wav');
