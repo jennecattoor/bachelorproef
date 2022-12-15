@@ -21,7 +21,7 @@ class Points extends Phaser.Scene {
     }
 
     create() {
-        let background = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'background-blurred').setAlpha(.3)
+        let background = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'background-blurred')
         let scaleX = this.cameras.main.width / background.width
         let scaleY = this.cameras.main.height / background.height
         scale = Math.max(scaleX, scaleY)

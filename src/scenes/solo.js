@@ -41,7 +41,7 @@ class Solo extends Phaser.Scene {
 
 
         // Instruction text
-        let instruction = this.add.text(this.cameras.main.width / 2, this.cameras.main.height - 100, 'You need to make sure that the moles cant steal the guitar', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '5rem' }).setOrigin(0.5, 0).setScrollFactor(0);
+        let instruction = this.add.text(this.cameras.main.width / 2, this.cameras.main.height - 100, `You need to make sure that the moles can't steal the guitar`, { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '5rem' }).setOrigin(0.5, 0).setScrollFactor(0);
         setTimeout(() => { instruction.setVisible(false) }, 4500);
 
         // Points text
@@ -53,7 +53,7 @@ class Solo extends Phaser.Scene {
         heartThree = this.add.image(this.cameras.main.width - 400 + 300, 100, 'heart').setScale(0.5).setScrollFactor(0)
 
         // Speed text
-        speedText = this.add.text(this.cameras.main.width / 2, this.cameras.main.height - 200, 'They are getting faster!', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '10rem' }).setOrigin(0.5, 0).setScrollFactor(0).setVisible(false);
+        speedText = this.add.text(this.cameras.main.width / 2, this.cameras.main.height - 200, 'They are speeding up!', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '10rem' }).setOrigin(0.5, 0).setScrollFactor(0).setVisible(false);
 
         // Playing the audio
         let audio = this.sound.add('assignment');

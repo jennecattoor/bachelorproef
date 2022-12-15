@@ -1,6 +1,7 @@
 import 'phaser'
 import Menu from './scenes/menu'
 import Video from './scenes/video'
+import Instructions from './scenes/instructions'
 import Duo from './scenes/duo'
 import Solo from './scenes/solo'
 import Points from './scenes/points'
@@ -13,13 +14,13 @@ var config = {
   type: Phaser.AUTO,
   width: '100vw',
   height: '100%',
-  backgroundColor: '#F7E093',
+  backgroundColor: '#000000',
   margin: 'none',
   scale: {
     mode: Phaser.Scale.RESIZE,
     autoCenter: Phaser.Scale.CENTER_BOTH
   },
-  scene: [Menu, Video, Solo, Duo, Points]
+  scene: [Menu, Video, Solo, Instructions, Duo, Points]
 };
 
 new Phaser.Game(config);

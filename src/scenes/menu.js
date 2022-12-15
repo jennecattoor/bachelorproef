@@ -16,7 +16,7 @@ class Menu extends Phaser.Scene {
 
     create() {
         this.cameras.main.fadeIn(500);
-        let background = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'background-blurred').setAlpha(.3)
+        let background = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'background-blurred')
         let scaleX = this.cameras.main.width / background.width
         let scaleY = this.cameras.main.height / background.height
         scale = Math.max(scaleX, scaleY)
@@ -42,7 +42,7 @@ class Menu extends Phaser.Scene {
             }
             if (e.key == 'c') {
                 this.cameras.main.fadeOut(500);
-                setTimeout(() => { this.scene.start("duo") }, 500);
+                setTimeout(() => { this.scene.start("instructions") }, 500);
             }
         });
     }
