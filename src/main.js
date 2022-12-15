@@ -1,11 +1,11 @@
 import 'phaser'
 import Menu from './scenes/menu'
-import Video from './scenes/video'
-import Instructions from './scenes/instructions'
+import SoloIntro from './scenes/soloIntro'
+import DuoIntro from './scenes/duoIntro'
 import Duo from './scenes/duo'
 import Solo from './scenes/solo'
-import Points from './scenes/points'
-import Results from './scenes/results'
+import SoloScore from './scenes/soloScore'
+import DuoScore from './scenes/duoScore'
 
 window.addEventListener('resize', function () {
   window.location.reload();
@@ -16,12 +16,11 @@ var config = {
   width: '100vw',
   height: '100%',
   backgroundColor: '#000000',
-  margin: 'none',
   scale: {
     mode: Phaser.Scale.RESIZE,
     autoCenter: Phaser.Scale.CENTER_BOTH
   },
-  scene: [Menu, Video, Solo, Instructions, Duo, Points, Results]
+  scene: [Menu, SoloIntro, DuoIntro, Solo, Duo, SoloScore, DuoScore]
 };
 
 new Phaser.Game(config);

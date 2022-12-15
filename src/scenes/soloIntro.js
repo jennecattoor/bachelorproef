@@ -4,17 +4,20 @@ let scale
 let video
 let startGame = false
 
-class Video extends Phaser.Scene {
+class SoloIntro extends Phaser.Scene {
     constructor() {
-        super("video");
+        super("soloIntro");
     }
 
     preload() {
-        this.load.image('smashgreen', './src/assets/images/green.png');
+        this.load.image('smashorange', './src/assets/images/orange.png');
     }
 
     create() {
+        // Fade in
         this.cameras.main.fadeIn(1000);
+
+        // Adding video
         video = this.add.video(this.cameras.main.width / 2, this.cameras.main.height / 2, 'intro', false);
         let scaleX = this.cameras.main.width / video.width
         let scaleY = this.cameras.main.height / video.height
@@ -22,10 +25,13 @@ class Video extends Phaser.Scene {
         video.setScale(scale).setScrollFactor(0)
         video.play(true);
 
-        this.add.image(150, 150, 'smashgreen').setScale(.5).setScrollFactor(0);
+        // Adding skip instructions
+        this.add.image(150, 150, 'smashorange').setScale(.5).setScrollFactor(0);
 
-        setTimeout(() => { video.destroy() }, 20500);
+        // Destroying video after 20 seconds
+        this.time.delayedCall(20500, () => { video.destroy() }, [], this);
 
+        // Listening to key input
         this.input.keyboard.on('keyup', (e) => {
             if (e.key == 'x') {
                 video.destroy()
@@ -38,10 +44,13 @@ class Video extends Phaser.Scene {
             if (startGame == false) {
                 startGame = true
                 this.cameras.main.fadeOut(500);
-                setTimeout(() => { this.scene.start("solo") }, 500);
+                setTimeout(() => {
+                    // this.scene.remove()
+                    this.scene.start("solo")
+                }, 500);
             }
         }
     }
 }
 
-export default Video
+export default SoloIntro

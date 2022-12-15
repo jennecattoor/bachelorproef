@@ -2,9 +2,9 @@ import 'phaser'
 
 let scale;
 
-class Instructions extends Phaser.Scene {
+class DuoIntro extends Phaser.Scene {
     constructor() {
-        super("instructions");
+        super("duoIntro");
     }
 
     preload() {
@@ -17,7 +17,9 @@ class Instructions extends Phaser.Scene {
 
 
     create() {
+        // FAde in
         this.cameras.main.fadeIn(500)
+
         // Background
         let background = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'background-blurred')
         let scaleX = this.cameras.main.width / background.width
@@ -26,24 +28,31 @@ class Instructions extends Phaser.Scene {
         background.setScale(scale).setScrollFactor(0)
 
         // Versus
-        this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'VS').setAlpha(.7).setScale(scale).setScrollFactor(0)
+        this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'VS').setAlpha(.6).setScale(scale).setScrollFactor(0)
         this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2, 'VS', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '18rem' }).setOrigin(0.5, .5).setScrollFactor(0);
         this.add.text(this.cameras.main.width / 2, this.cameras.main.height - 200, 'Pick a side!', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '10rem' }).setOrigin(0.5, 0).setScrollFactor(0);
+
         // Images of moles
         this.add.image(this.cameras.main.width / 4 * 3, this.cameras.main.height / 2, 'mole-blue').setScale(scale).setScrollFactor(0);
         this.add.image(this.cameras.main.width / 4 * 1, this.cameras.main.height / 2, 'mole-red').setScale(scale).setScrollFactor(0);
+
         // Mole texts
         this.add.text(this.cameras.main.width / 4 * 3, this.cameras.main.height / 2 - 350, 'Team Blue', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '10rem' }).setOrigin(0.5, .5).setScrollFactor(0);
         this.add.text(this.cameras.main.width / 4 * 1, this.cameras.main.height / 2 - 350, 'Team Red', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '10rem' }).setOrigin(0.5, .5).setScrollFactor(0);
+
         // Play sound
         this.sound.add('side').play();
 
+        // Start game
         this.time.delayedCall(5500, () => {
             this.cameras.main.fadeOut(500)
-            this.time.delayedCall(500, () => { this.scene.start('duo') }, [], this);
+            this.time.delayedCall(500, () => {
+                this.scene.remove()
+                this.scene.start('duo')
+            }, [], this);
         }, [], this);
 
     }
 }
 
-export default Instructions
+export default DuoIntro
