@@ -211,7 +211,7 @@ class Solo extends Phaser.Scene {
                 this.cameras.main.shake(500);
                 this.cameras.main.fadeOut(500);
                 setTimeout(() => {
-                    this.scene.start('points', { points: points })
+                    this.scene.start('soloScore', { points: points })
                 }, 500);
             }
         }

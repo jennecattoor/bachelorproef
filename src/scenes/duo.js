@@ -208,7 +208,7 @@ class Duo extends Phaser.Scene {
             if (initialTime <= 0) {
                 clearInterval(timerInterval)
                 this.cameras.main.fadeOut(500);
-                this.time.delayedCall(500, () => { this.scene.start('results', { scoreRed: scoreRed, scoreBlue: scoreBlue }) }, [], this);
+                this.time.delayedCall(500, () => { this.scene.start('duoScore', { scoreRed: scoreRed, scoreBlue: scoreBlue }) }, [], this);
                 return
             }
         }, 1000);

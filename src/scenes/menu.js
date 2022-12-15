@@ -38,11 +38,11 @@ class Menu extends Phaser.Scene {
             if (e.key == 'w') {
                 this.cameras.main.fadeOut(500);
                 // this.time.delayedCall(500, () => { this.scene.start("video") }, [], this);
-                setTimeout(() => { this.scene.start("video") }, 500);
+                setTimeout(() => { this.scene.start("soloIntro") }, 500);
             }
             if (e.key == 'c') {
                 this.cameras.main.fadeOut(500);
-                setTimeout(() => { this.scene.start("instructions") }, 500);
+                setTimeout(() => { this.scene.start("duoIntro") }, 500);
             }
         });
     }

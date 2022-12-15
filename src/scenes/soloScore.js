@@ -3,9 +3,9 @@ import 'phaser'
 let scale
 let points
 
-class Points extends Phaser.Scene {
+class SoloScore extends Phaser.Scene {
     constructor() {
-        super("points");
+        super("soloScore");
     }
 
     init(data) {
@@ -61,4 +61,4 @@ class Points extends Phaser.Scene {
     }
 }
 
-export default Points
+export default SoloScore

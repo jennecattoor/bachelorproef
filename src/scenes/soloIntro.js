@@ -4,13 +4,13 @@ let scale
 let video
 let startGame = false
 
-class Video extends Phaser.Scene {
+class SoloIntro extends Phaser.Scene {
     constructor() {
-        super("video");
+        super("soloIntro");
     }
 
     preload() {
-        this.load.image('smashgreen', './src/assets/images/green.png');
+        this.load.image('smashorange', './src/assets/images/orange.png');
     }
 
     create() {
@@ -22,7 +22,7 @@ class Video extends Phaser.Scene {
         video.setScale(scale).setScrollFactor(0)
         video.play(true);
 
-        this.add.image(150, 150, 'smashgreen').setScale(.5).setScrollFactor(0);
+        this.add.image(150, 150, 'smashorange').setScale(.5).setScrollFactor(0);
 
         setTimeout(() => { video.destroy() }, 20500);
 
@@ -44,4 +44,4 @@ class Video extends Phaser.Scene {
     }
 }
 
-export default Video
+export default SoloIntro

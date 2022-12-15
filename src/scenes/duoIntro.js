@@ -2,9 +2,9 @@ import 'phaser'
 
 let scale;
 
-class Instructions extends Phaser.Scene {
+class DuoIntro extends Phaser.Scene {
     constructor() {
-        super("instructions");
+        super("duoIntro");
     }
 
     preload() {
@@ -26,7 +26,7 @@ class Instructions extends Phaser.Scene {
         background.setScale(scale).setScrollFactor(0)
 
         // Versus
-        this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'VS').setAlpha(.7).setScale(scale).setScrollFactor(0)
+        this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'VS').setAlpha(.6).setScale(scale).setScrollFactor(0)
         this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2, 'VS', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '18rem' }).setOrigin(0.5, .5).setScrollFactor(0);
         this.add.text(this.cameras.main.width / 2, this.cameras.main.height - 200, 'Pick a side!', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '10rem' }).setOrigin(0.5, 0).setScrollFactor(0);
         // Images of moles
@@ -46,4 +46,4 @@ class Instructions extends Phaser.Scene {
     }
 }
 
-export default Instructions
+export default DuoIntro

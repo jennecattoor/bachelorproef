@@ -2,10 +2,11 @@ import 'phaser'
 
 let scale
 let scoreRed, scoreBlue
+let test = 0
 
-class Results extends Phaser.Scene {
+class DuoScore extends Phaser.Scene {
     constructor() {
-        super("results");
+        super("duoScore");
     }
 
     init(data) {
@@ -43,9 +44,11 @@ class Results extends Phaser.Scene {
             this.sound.add('tie').play();
             winnerText.setText('It\'s a tie!')
         }
+
         // Images of moles
         this.add.image(this.cameras.main.width / 4 * 3, this.cameras.main.height / 2, 'mole-blue').setScale(scale).setScrollFactor(0);
         this.add.image(this.cameras.main.width / 4 * 1, this.cameras.main.height / 2, 'mole-red').setScale(scale).setScrollFactor(0);
+
         // Mole texts
         this.add.text(this.cameras.main.width / 4 * 3, this.cameras.main.height / 2 + 180, scoreBlue + ' Points', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '10rem' }).setOrigin(0.5, .5).setScrollFactor(0);
         this.add.text(this.cameras.main.width / 4 * 1, this.cameras.main.height / 2 + 180, scoreRed + ' Points', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '10rem' }).setOrigin(0.5, .5).setScrollFactor(0);
@@ -54,10 +57,11 @@ class Results extends Phaser.Scene {
             this.cameras.main.fadeOut(500);
             this.time.delayedCall(500, () => { location.reload() }, [], this);
         }, [], this);
+
     }
 
     update() {
     }
 }
 
-export default Results
+export default DuoScore
