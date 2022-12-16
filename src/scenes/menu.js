@@ -34,12 +34,12 @@ class Menu extends Phaser.Scene {
         subtitle.setOrigin(0.5, 0).setScrollFactor(0);
 
         // Buttons with images
-        this.add.image(this.cameras.main.width / 2 - 300, this.cameras.main.height / 2, 'singleplayer').setScale(.8);
-        this.add.image(this.cameras.main.width / 2 + 300, this.cameras.main.height / 2, 'multiplayer').setScale(.8);
+        this.add.image(this.cameras.main.width / 2 - 400, this.cameras.main.height / 2, 'singleplayer').setScale(.8);
+        this.add.image(this.cameras.main.width / 2 + 400, this.cameras.main.height / 2, 'multiplayer').setScale(.8);
 
         // Showing instructions text
-        this.add.text(this.cameras.main.width / 2 - 300, this.cameras.main.height - 100, 'Smash Red for Single Player', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '4rem' }).setOrigin(0.5, 0.5).setScrollFactor(0);
-        this.add.text(this.cameras.main.width / 2 + 300, this.cameras.main.height - 100, 'Smash Yellow for 2 players', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '4rem' }).setOrigin(0.5, 0.5).setScrollFactor(0);
+        this.add.text(this.cameras.main.width / 2 - 400, this.cameras.main.height / 2 + 200, 'Smash Red for Single Player', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '4rem' }).setOrigin(0.5, 0.5).setScrollFactor(0);
+        this.add.text(this.cameras.main.width / 2 + 400, this.cameras.main.height / 2 + 200, 'Smash Yellow for 2 players', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '4rem' }).setOrigin(0.5, 0.5).setScrollFactor(0);
 
         // Listening to key input
         this.input.keyboard.on('keyup', (e) => {

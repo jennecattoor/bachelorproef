@@ -57,13 +57,14 @@ class DuoScore extends Phaser.Scene {
         this.add.text(this.cameras.main.width / 4 * 3, this.cameras.main.height / 2 + 180, scoreBlue + ' Points', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '10rem' }).setOrigin(0.5, .5).setScrollFactor(0);
         this.add.text(this.cameras.main.width / 4 * 1, this.cameras.main.height / 2 + 180, scoreRed + ' Points', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '10rem' }).setOrigin(0.5, .5).setScrollFactor(0);
 
-        this.time.delayedCall(4000, () => {
-            this.cameras.main.fadeOut(300);
-            this.time.delayedCall(300, () => { location.reload() }, [], this);
+        this.time.delayedCall(5000, () => {
+            this.cameras.main.fadeOut(500);
+            this.time.delayedCall(500, () => { location.reload() }, [], this);
         }, [], this);
     }
 
     update() {
+        console.log('update')
     }
 }
 
