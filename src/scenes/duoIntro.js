@@ -10,8 +10,8 @@ class DuoIntro extends Phaser.Scene {
     preload() {
         this.load.image('background', './src/assets/images/background.jpg');
         this.load.image('VS', './src/assets/images/VS.jpg');
-        this.load.image('mole-red', './src/assets/images/mole-red.png');
-        this.load.image('mole-blue', './src/assets/images/mole-blue.png');
+        this.load.image('team-red', './src/assets/images/team-red.png');
+        this.load.image('team-blue', './src/assets/images/team-blue.png');
         this.load.audio('side', './src/assets/audio/side.wav');
     }
 
@@ -29,16 +29,16 @@ class DuoIntro extends Phaser.Scene {
 
         // Versus
         this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'VS').setAlpha(.6).setScale(scale).setScrollFactor(0)
-        this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2, 'VS', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '18rem' }).setOrigin(0.5, .5).setScrollFactor(0);
-        this.add.text(this.cameras.main.width / 2, this.cameras.main.height - 200, 'Pick a side!', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '10rem' }).setOrigin(0.5, 0).setScrollFactor(0);
+        this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2, 'VS', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '16rem' }).setScale(scale).setOrigin(0.5, .5).setScrollFactor(0);
+        this.add.text(this.cameras.main.width / 2, this.cameras.main.height - 200, 'Pick a side!', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '7rem' }).setScale(scale).setOrigin(0.5, 0).setScrollFactor(0);
 
         // Images of moles
-        this.add.image(this.cameras.main.width / 4 * 3, this.cameras.main.height / 2, 'mole-blue').setScale(scale).setScrollFactor(0);
-        this.add.image(this.cameras.main.width / 4 * 1, this.cameras.main.height / 2, 'mole-red').setScale(scale).setScrollFactor(0);
+        this.add.image(this.cameras.main.width / 4 * 3, this.cameras.main.height / 2, 'team-blue').setScale(scale).setScrollFactor(0);
+        this.add.image(this.cameras.main.width / 4 * 1, this.cameras.main.height / 2, 'team-red').setScale(scale).setScrollFactor(0);
 
         // Mole texts
-        this.add.text(this.cameras.main.width / 4 * 3, this.cameras.main.height / 2 - 350, 'Team Blue', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '10rem' }).setOrigin(0.5, .5).setScrollFactor(0);
-        this.add.text(this.cameras.main.width / 4 * 1, this.cameras.main.height / 2 - 350, 'Team Red', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '10rem' }).setOrigin(0.5, .5).setScrollFactor(0);
+        this.add.text(this.cameras.main.width / 4 * 3, this.cameras.main.height / 2 - 350, 'Team Blue', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '7rem' }).setScale(scale).setOrigin(0.5, .5).setScrollFactor(0);
+        this.add.text(this.cameras.main.width / 4 * 1, this.cameras.main.height / 2 - 350, 'Team Red', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '7rem' }).setScale(scale).setOrigin(0.5, .5).setScrollFactor(0);
 
         // Play sound
         this.sound.add('side').play();

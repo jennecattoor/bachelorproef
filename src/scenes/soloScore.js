@@ -30,10 +30,10 @@ class SoloScore extends Phaser.Scene {
         background.setScale(scale).setScrollFactor(0)
 
         // Score text
-        this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2 - 75, `You scored ${points} Points`, { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '14rem' }).setOrigin(0.5, 0.5).setScrollFactor(0);
+        this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2 - 75, `You scored ${points} Points`, { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '14rem' }).setScale(scale).setOrigin(0.5, 0.5).setScrollFactor(0);
 
         // Score comment
-        let titleSmall = this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2 + 75, 'Nice try', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '8.6rem' }).setOrigin(0.5, 0.5).setScrollFactor(0);
+        let titleSmall = this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2 + 75, 'Nice try', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '8.6rem' }).setScale(scale).setOrigin(0.5, 0.5).setScrollFactor(0);
 
         // Score sound and comment
         let one = this.sound.add('one');

@@ -30,6 +30,8 @@ class Duo extends Phaser.Scene {
         this.load.image('mole-red', './src/assets/images/mole-red.png');
         this.load.image('mole-blue', './src/assets/images/mole-blue.png');
         this.load.image('hit', './src/assets/images/hit.png');
+        this.load.image('mole-red', './src/assets/images/mole-red.png');
+        this.load.image('mole-blue', './src/assets/images/mole-blue.png');
     }
 
     create() {
@@ -157,7 +159,7 @@ class Duo extends Phaser.Scene {
     moveMoleBack = (moleMoved) => {
         molesUp = molesUp.filter(mole => mole != moleMoved)
         let tween = this.tweens.add({
-            y: moleMoved.y + 150,
+            y: moleMoved.y + this.cameras.main.height / 9,
             targets: moleMoved,
             ease: "Power1",
             duration: 250,
@@ -170,7 +172,7 @@ class Duo extends Phaser.Scene {
 
     moveMole = (moleMoved) => {
         let tween = this.tweens.add({
-            y: moleMoved.y - 150,
+            y: moleMoved.y - this.cameras.main.height / 9,
             targets: moleMoved,
             ease: "Power1",
             duration: 250,
