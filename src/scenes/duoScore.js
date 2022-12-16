@@ -34,7 +34,7 @@ class DuoScore extends Phaser.Scene {
         this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'VS').setAlpha(.7).setScale(scale).setScrollFactor(0)
 
         // Winner text and sound
-        let winnerText = this.add.text(this.cameras.main.width / 2, this.cameras.main.height - 200, '', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '10rem' }).setScale(scale).setOrigin(0.5, 0).setScrollFactor(0);
+        let winnerText = this.add.text(this.cameras.main.width / 2, this.cameras.main.height - 200, '', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '8.5rem' }).setScale(scale).setOrigin(0.5, 0).setScrollFactor(0);
 
         if (scoreRed > scoreBlue) {
             winnerText.setText('Team Red wins!')
