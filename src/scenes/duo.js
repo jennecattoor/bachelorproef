@@ -8,7 +8,7 @@ let scoreTextRed;
 let scoreTextBlue;
 let scoreRed = 0;
 let scoreBlue = 0;
-let initialTime = 75;
+let initialTime = 15;
 let spawnSpeed = 1000;
 let checkMoleSpeed = 2000;
 let molesAnimated = [];
@@ -195,6 +195,9 @@ class Duo extends Phaser.Scene {
         let randomHole = Math.floor(Math.random() * 6);
         while (molesAnimated.includes(redMoles[randomHole]) || molesAnimated.includes(blueMoles[randomHole])) {
             randomHole = Math.floor(Math.random() * 6);
+            if (molesAnimated.length == 6) {
+                return;
+            }
         }
         if (previousMoleRed) {
             previousMoleRed = false
