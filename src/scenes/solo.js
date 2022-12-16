@@ -1,14 +1,15 @@
 import 'phaser'
 
 let scale;
-let interval
-let speedText
-let points = 0
+let interval;
+let speedText;
+let music;
+let points = 0;
 let lives = 3;
 let spawnSpeed = 2000;
 let molesUp = [];
 let molesAnimated = [];
-let increasedSpeed = false
+let increasedSpeed = false;
 let heartOne, heartTwo, heartThree;
 let mole1, mole2, mole3, mole4, mole5, mole6;
 
@@ -25,8 +26,8 @@ class Solo extends Phaser.Scene {
         this.load.image('mole', './src/assets/images/mole.png');
         this.load.image('hit', './src/assets/images/hit.png');
         this.load.image('heart', './src/assets/images/heart.png');
+        this.load.audio('guitar', './src/assets/audio/guitar.mp3');
     }
-
 
     create() {
         // Fading in camera
@@ -57,6 +58,10 @@ class Solo extends Phaser.Scene {
         // Playing the audio
         let audio = this.sound.add('assignment');
         audio.play();
+
+        // Playing music
+        music = this.sound.add('guitar', { volume: 0.8 });
+        music.play()
 
         // Creating the mask from the top
         let maskShapeTop = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, 'mask-top').setVisible(false);
@@ -91,7 +96,6 @@ class Solo extends Phaser.Scene {
 
         // Listening to keys
         this.input.keyboard.on('keyup', (e) => this.keyboardInput(e));
-
     }
 
     keyboardInput = (event) => {
@@ -165,7 +169,7 @@ class Solo extends Phaser.Scene {
     moveMoleBack = (moleNr) => {
         molesUp = molesUp.filter(mole => mole != moleNr)
         let tween = this.tweens.add({
-            y: moleNr.y + 150,
+            y: moleNr.y + this.cameras.main.height / 9,
             targets: moleNr,
             ease: "Power1",
             duration: 250,
@@ -178,7 +182,7 @@ class Solo extends Phaser.Scene {
 
     moveMole = (moleNr) => {
         let tween = this.tweens.add({
-            y: moleNr.y - 150,
+            y: moleNr.y - this.cameras.main.height / 9,
             targets: moleNr,
             ease: "Power1",
             duration: 250,
@@ -187,7 +191,7 @@ class Solo extends Phaser.Scene {
                 tween.remove();
             }
         })
-        this.time.delayedCall(2000, () => { this.checkMoleTime(moleNr); }, [], this);
+        this.time.delayedCall(spawnSpeed, () => { this.checkMoleTime(moleNr); }, [], this);
     }
 
     checkMoleTime = (moleNr) => {
@@ -196,11 +200,13 @@ class Solo extends Phaser.Scene {
             lives--;
             this.showHearts(lives)
             if (lives === 0) {
-                this.cameras.main.shake(500);
                 this.cameras.main.fadeOut(500);
-                setTimeout(() => {
-                    this.scene.start('soloScore', { points: points })
-                }, 500);
+                this.tweens.add({
+                    targets: music,
+                    volume: 0,
+                    duration: 600
+                });
+                this.time.delayedCall(700, () => { this.scene.start('soloScore', { points: points }) }, [], this);
             }
         }
     }
@@ -219,7 +225,8 @@ class Solo extends Phaser.Scene {
         if (points === 12 && increasedSpeed === false) {
             increasedSpeed = true
             clearInterval(interval)
-            interval = setInterval(() => { this.spawnMole() }, spawnSpeed - 300)
+            spawnSpeed = 1750
+            interval = setInterval(() => { this.spawnMole() }, spawnSpeed)
             speedText.setVisible(true)
         } else if (points === 13) {
             increasedSpeed = false
@@ -228,7 +235,8 @@ class Solo extends Phaser.Scene {
         if (points === 24 && increasedSpeed === false) {
             increasedSpeed = true
             clearInterval(interval)
-            interval = setInterval(() => { this.spawnMole() }, spawnSpeed - 500)
+            spawnSpeed = 1500
+            interval = setInterval(() => { this.spawnMole() }, spawnSpeed)
             speedText.setVisible(true)
         } else if (points === 25) {
             increasedSpeed = false
@@ -237,7 +245,8 @@ class Solo extends Phaser.Scene {
         if (points === 36 && increasedSpeed === false) {
             increasedSpeed = true
             clearInterval(interval)
-            interval = setInterval(() => { this.spawnMole() }, spawnSpeed - 800)
+            spawnSpeed = 1250
+            interval = setInterval(() => { this.spawnMole() }, spawnSpeed)
             speedText.setVisible(true)
         } else if (points === 37) {
             increasedSpeed = false
@@ -246,7 +255,8 @@ class Solo extends Phaser.Scene {
         if (points === 48 && increasedSpeed === false) {
             increasedSpeed = true
             clearInterval(interval)
-            interval = setInterval(() => { this.spawnMole() }, spawnSpeed - 1000)
+            spawnSpeed = 1000
+            interval = setInterval(() => { this.spawnMole() }, spawnSpeed)
             speedText.setVisible(true)
         } else if (points === 49) {
             increasedSpeed = false

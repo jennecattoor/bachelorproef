@@ -6,11 +6,11 @@ let interval;
 let speedText;
 let scoreTextRed;
 let scoreTextBlue;
+let backgroundSong;
 let scoreRed = 0;
 let scoreBlue = 0;
-let initialTime = 15;
-let spawnSpeed = 1000;
-let checkMoleSpeed = 2000;
+let initialTime = 10;
+let spawnSpeed = 1500;
 let molesAnimated = [];
 let molesUp = [];
 let increasedSpeed = false;
@@ -30,6 +30,9 @@ class Duo extends Phaser.Scene {
         this.load.image('mole-red', './src/assets/images/mole-red.png');
         this.load.image('mole-blue', './src/assets/images/mole-blue.png');
         this.load.image('hit', './src/assets/images/hit.png');
+        this.load.image('mole-red', './src/assets/images/mole-red.png');
+        this.load.image('mole-blue', './src/assets/images/mole-blue.png');
+        this.load.audio('song-duo', './src/assets/audio/song-duo.mp3');
     }
 
     create() {
@@ -47,6 +50,10 @@ class Duo extends Phaser.Scene {
         let instruction = this.add.text(this.cameras.main.width / 2, this.cameras.main.height - 100, `The goal is to eliminate as many moles as possible from the other team`, { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '5rem' }).setOrigin(0.5, 0).setScrollFactor(0);
         this.sound.add('instructions').play();
         setTimeout(() => { instruction.setVisible(false) }, 5000);
+
+        // Music
+        backgroundSong = this.sound.add('song-duo');
+        backgroundSong.play()
 
         // Point text
         scoreTextRed = this.add.text(30, 30, '0 Points', { fontFamily: 'roadstore, Arial', color: '#fc0000', fontSize: '10rem' });
@@ -157,7 +164,7 @@ class Duo extends Phaser.Scene {
     moveMoleBack = (moleMoved) => {
         molesUp = molesUp.filter(mole => mole != moleMoved)
         let tween = this.tweens.add({
-            y: moleMoved.y + 150,
+            y: moleMoved.y + this.cameras.main.height / 9,
             targets: moleMoved,
             ease: "Power1",
             duration: 250,
@@ -170,7 +177,7 @@ class Duo extends Phaser.Scene {
 
     moveMole = (moleMoved) => {
         let tween = this.tweens.add({
-            y: moleMoved.y - 150,
+            y: moleMoved.y - this.cameras.main.height / 9,
             targets: moleMoved,
             ease: "Power1",
             duration: 250,
@@ -179,7 +186,7 @@ class Duo extends Phaser.Scene {
                 tween.remove();
             }
         })
-        this.time.delayedCall(checkMoleSpeed, () => { this.checkMoleTime(moleMoved); }, [], this);
+        this.time.delayedCall((spawnSpeed * 2), () => { this.checkMoleTime(moleMoved); }, [], this);
     }
 
     checkMoleTime = (mole) => {
@@ -217,8 +224,12 @@ class Duo extends Phaser.Scene {
             if (initialTime <= 0) {
                 clearInterval(timerInterval)
                 this.cameras.main.fadeOut(500);
-                this.time.delayedCall(500, () => {
-                    this.scene.remove()
+                this.tweens.add({
+                    targets: backgroundSong,
+                    volume: 0,
+                    duration: 500
+                });
+                this.time.delayedCall(600, () => {
                     this.scene.start('duoScore', { scoreRed: scoreRed, scoreBlue: scoreBlue })
                 }, [], this);
                 return
@@ -234,13 +245,25 @@ class Duo extends Phaser.Scene {
     }
 
     update() {
+
+        if (initialTime === 65 && increasedSpeed === false) {
+            increasedSpeed = true
+            clearInterval(interval)
+            spawnSpeed = 1000
+            interval = setInterval(() => { this.spawnMole() }, spawnSpeed)
+            speedText.setVisible(true)
+        } else if (initialTime === 63) {
+            increasedSpeed = false
+            speedText.setVisible(false)
+        }
+
         if (initialTime === 45 && increasedSpeed === false) {
             increasedSpeed = true
             clearInterval(interval)
-            checkMoleSpeed = 1750
-            interval = setInterval(() => { this.spawnMole() }, spawnSpeed - 250)
+            spawnSpeed = 750
+            interval = setInterval(() => { this.spawnMole() }, spawnSpeed)
             speedText.setVisible(true)
-        } else if (initialTime === 32) {
+        } else if (initialTime === 42) {
             increasedSpeed = false
             speedText.setVisible(false)
         }

@@ -11,6 +11,7 @@ class SoloIntro extends Phaser.Scene {
 
     preload() {
         this.load.image('smashorange', './src/assets/images/orange.png');
+        this.load.video('intro', './src/assets/video/intro.mp4');
     }
 
     create() {
@@ -45,7 +46,6 @@ class SoloIntro extends Phaser.Scene {
                 startGame = true
                 this.cameras.main.fadeOut(500);
                 setTimeout(() => {
-                    // this.scene.remove()
                     this.scene.start("solo")
                 }, 500);
             }
