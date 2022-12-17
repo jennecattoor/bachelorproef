@@ -8,11 +8,11 @@ class DuoIntro extends Phaser.Scene {
     }
 
     preload() {
+        this.load.image('VS', './../assets/images/duo/VS.jpg');
+        this.load.audio('side', './../assets/audio/duo/side.mp3');
         this.load.image('background', './../assets/images/background.jpg');
-        this.load.image('VS', './../assets/images/VS.jpg');
-        this.load.image('team-red', './../assets/images/team-red.png');
-        this.load.image('team-blue', './../assets/images/team-blue.png');
-        this.load.audio('side', './../assets/audio/side.wav');
+        this.load.image('team-red', './../assets/images/duo/team-red.png');
+        this.load.image('team-blue', './../assets/images/duo/team-blue.png');
     }
 
 

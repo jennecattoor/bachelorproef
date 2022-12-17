@@ -14,9 +14,9 @@ class DuoScore extends Phaser.Scene {
     }
 
     preload() {
-        this.load.audio('redWins', './../assets/audio/redWins.wav');
-        this.load.audio('blueWins', './../assets/audio/blueWins.wav');
-        this.load.audio('tie', './../assets/audio/tie.wav');
+        this.load.audio('tie', './../assets/audio/duo/tie.mp3');
+        this.load.audio('redWins', './../assets/audio/duo/redWins.mp3');
+        this.load.audio('blueWins', './../assets/audio/duo/blueWins.mp3');
     }
 
     create() {
@@ -61,10 +61,6 @@ class DuoScore extends Phaser.Scene {
             this.cameras.main.fadeOut(500);
             this.time.delayedCall(500, () => { location.reload() }, [], this);
         }, [], this);
-    }
-
-    update() {
-        console.log('update')
     }
 }
 
