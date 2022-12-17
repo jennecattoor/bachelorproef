@@ -7,8 +7,8 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "bachelor-thesis",
-    "version": "0.1.0"
+    "productName": "wilde-westen",
+    "version": "1.0.0"
   },
   "tauri": {
     "allowlist": {
@@ -17,7 +17,7 @@
     "bundle": {
       "active": true,
       "category": "DeveloperTool",
-      "copyright": "",
+      "copyright": "Jenne Cattoor",
       "deb": {
         "depends": []
       },
@@ -30,7 +30,7 @@
         "icons/icon.ico"
       ],
       "identifier": "com.jenne.bachelor-thesis",
-      "longDescription": "",
+      "longDescription": "Wilde Westen",
       "macOS": {
         "entitlements": null,
         "exceptionDomain": "",
@@ -58,7 +58,7 @@
         "fullscreen": false,
         "height": 600,
         "resizable": true,
-        "title": "bachelor-thesis",
+        "title": "Wilde Westen Game",
         "width": 800
       }
     ]

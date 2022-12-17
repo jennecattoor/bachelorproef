@@ -19,14 +19,14 @@ class Solo extends Phaser.Scene {
     }
 
     preload() {
-        this.load.audio('assignment', './src/assets/audio/assignment.wav');
-        this.load.image('background', './src/assets/images/background.jpg');
-        this.load.image('mask-top', './src/assets/images/mask-top.png');
-        this.load.image('mask-bottem', './src/assets/images/mask-bottem.png');
-        this.load.image('mole', './src/assets/images/mole.png');
-        this.load.image('hit', './src/assets/images/hit.png');
-        this.load.image('heart', './src/assets/images/heart.png');
-        this.load.audio('guitar', './src/assets/audio/guitar.mp3');
+        this.load.audio('assignment', './../assets/audio/assignment.wav');
+        this.load.image('background', './../assets/images/background.jpg');
+        this.load.image('mask-top', './../assets/images/mask-top.png');
+        this.load.image('mask-bottem', './../assets/images/mask-bottem.png');
+        this.load.image('mole', './../assets/images/mole.png');
+        this.load.image('hit', './../assets/images/hit.png');
+        this.load.image('heart', './../assets/images/heart.png');
+        this.load.audio('guitar', './../assets/audio/guitar.mp3');
     }
 
     create() {

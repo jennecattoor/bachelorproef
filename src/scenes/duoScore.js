@@ -14,9 +14,9 @@ class DuoScore extends Phaser.Scene {
     }
 
     preload() {
-        this.load.audio('redWins', './src/assets/audio/redWins.wav');
-        this.load.audio('blueWins', './src/assets/audio/blueWins.wav');
-        this.load.audio('tie', './src/assets/audio/tie.wav');
+        this.load.audio('redWins', './../assets/audio/redWins.wav');
+        this.load.audio('blueWins', './../assets/audio/blueWins.wav');
+        this.load.audio('tie', './../assets/audio/tie.wav');
     }
 
     create() {

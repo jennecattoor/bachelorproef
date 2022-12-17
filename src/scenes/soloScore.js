@@ -13,10 +13,10 @@ class SoloScore extends Phaser.Scene {
     }
 
     preload() {
-        this.load.audio('one', './src/assets/audio/one.wav');
-        this.load.audio('two', './src/assets/audio/two.wav');
-        this.load.audio('three', './src/assets/audio/three.wav');
-        this.load.audio('four', './src/assets/audio/four.wav');
+        this.load.audio('one', './../assets/audio/one.wav');
+        this.load.audio('two', './../assets/audio/two.wav');
+        this.load.audio('three', './../assets/audio/three.wav');
+        this.load.audio('four', './../assets/audio/four.wav');
     }
 
     create() {
