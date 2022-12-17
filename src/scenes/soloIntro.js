@@ -10,8 +10,8 @@ class SoloIntro extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('smashorange', './../assets/images/orange.png');
         this.load.video('intro', './../assets/video/intro.mp4');
+        this.load.image('skip', './../assets/images/solo/skip.png');
     }
 
     create() {
@@ -27,7 +27,7 @@ class SoloIntro extends Phaser.Scene {
         video.play(true);
 
         // Adding skip instructions
-        this.add.image(150, 150, 'smashorange').setScale(.5).setScrollFactor(0);
+        this.add.image(150, 150, 'skip').setScale(.5).setScrollFactor(0);
 
         // Destroying video after 20 seconds
         this.time.delayedCall(20500, () => { video.destroy() }, [], this);

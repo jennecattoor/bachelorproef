@@ -23,16 +23,14 @@ class Duo extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('background', './../assets/images/background.jpg');
-        this.load.audio('instructions', './../assets/audio/instructions.wav');
-        this.load.image('mask-top', './../assets/images/mask-top.png');
-        this.load.image('mask-bottem', './../assets/images/mask-bottem.png');
-        this.load.image('mole-red', './../assets/images/mole-red.png');
-        this.load.image('mole-blue', './../assets/images/mole-blue.png');
         this.load.image('hit', './../assets/images/hit.png');
-        this.load.image('mole-red', './../assets/images/mole-red.png');
-        this.load.image('mole-blue', './../assets/images/mole-blue.png');
-        this.load.audio('song-duo', './../assets/audio/song-duo.mp3');
+        this.load.image('mask-top', './../assets/images/mask-top.png');
+        this.load.image('mole-red', './../assets/images/duo/mole-red.png');
+        this.load.image('background', './../assets/images/background.jpg');
+        this.load.image('mask-bottem', './../assets/images/mask-bottem.png');
+        this.load.image('mole-blue', './../assets/images/duo/mole-blue.png');
+        this.load.audio('music-duo', './../assets/audio/music/music-duo.mp3');
+        this.load.audio('instructions', './../assets/audio/duo/instructions.mp3');
     }
 
     create() {
@@ -52,7 +50,7 @@ class Duo extends Phaser.Scene {
         setTimeout(() => { instruction.setVisible(false) }, 5000);
 
         // Music
-        backgroundSong = this.sound.add('song-duo');
+        backgroundSong = this.sound.add('music-duo');
         backgroundSong.play()
 
         // Point text
@@ -223,6 +221,7 @@ class Duo extends Phaser.Scene {
             timerText.setText(this.formatTime(initialTime));
             if (initialTime <= 0) {
                 clearInterval(timerInterval)
+                clearInterval(interval)
                 this.cameras.main.fadeOut(500);
                 this.tweens.add({
                     targets: backgroundSong,

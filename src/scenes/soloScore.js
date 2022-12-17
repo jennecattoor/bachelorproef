@@ -13,10 +13,10 @@ class SoloScore extends Phaser.Scene {
     }
 
     preload() {
-        this.load.audio('one', './../assets/audio/one.wav');
-        this.load.audio('two', './../assets/audio/two.wav');
-        this.load.audio('three', './../assets/audio/three.wav');
-        this.load.audio('four', './../assets/audio/four.wav');
+        this.load.audio('one', './../assets/audio/solo/one.mp3');
+        this.load.audio('two', './../assets/audio/solo/two.mp3');
+        this.load.audio('four', './../assets/audio/solo/four.mp3');
+        this.load.audio('three', './../assets/audio/solo/three.mp3');
     }
 
     create() {
@@ -62,10 +62,6 @@ class SoloScore extends Phaser.Scene {
                 location.reload()
             }, [], this);
         }, [], this);
-    }
-
-    update() {
-
     }
 }
 

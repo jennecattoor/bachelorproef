@@ -1,11 +1,11 @@
 import 'phaser'
 
+let music;
 let scale;
 let interval;
 let speedText;
-let music;
-let points = 0;
 let lives = 3;
+let points = 0;
 let spawnSpeed = 2000;
 let molesUp = [];
 let molesAnimated = [];
@@ -19,14 +19,14 @@ class Solo extends Phaser.Scene {
     }
 
     preload() {
-        this.load.audio('assignment', './../assets/audio/assignment.wav');
-        this.load.image('background', './../assets/images/background.jpg');
-        this.load.image('mask-top', './../assets/images/mask-top.png');
-        this.load.image('mask-bottem', './../assets/images/mask-bottem.png');
-        this.load.image('mole', './../assets/images/mole.png');
         this.load.image('hit', './../assets/images/hit.png');
-        this.load.image('heart', './../assets/images/heart.png');
-        this.load.audio('guitar', './../assets/audio/guitar.mp3');
+        this.load.image('mole', './../assets/images/solo/mole.png');
+        this.load.image('heart', './../assets/images/solo/heart.png');
+        this.load.image('mask-top', './../assets/images/mask-top.png');
+        this.load.image('background', './../assets/images/background.jpg');
+        this.load.image('mask-bottem', './../assets/images/mask-bottem.png');
+        this.load.audio('assignment', './../assets/audio/solo/assignment.mp3');
+        this.load.audio('music-solo', './../assets/audio/music/music-solo.mp3');
     }
 
     create() {
@@ -41,7 +41,7 @@ class Solo extends Phaser.Scene {
         background.setScale(scale).setScrollFactor(0)
 
         // Instruction text
-        let instruction = this.add.text(this.cameras.main.width / 2, this.cameras.main.height - 100, `You need to make sure that the moles can't steal the guitar`, { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '5rem' }).setOrigin(0.5, 0).setScrollFactor(0);
+        let instruction = this.add.text(this.cameras.main.width / 2, this.cameras.main.height - 100, `You need to make sure that the moles can't steal the music-solo`, { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '5rem' }).setOrigin(0.5, 0).setScrollFactor(0);
         setTimeout(() => { instruction.setVisible(false) }, 4500);
 
         // Points text
@@ -60,7 +60,7 @@ class Solo extends Phaser.Scene {
         audio.play();
 
         // Playing music
-        music = this.sound.add('guitar', { volume: 0.8 });
+        music = this.sound.add('music-solo', { volume: 0.8 });
         music.play()
 
         // Creating the mask from the top
@@ -200,6 +200,7 @@ class Solo extends Phaser.Scene {
             lives--;
             this.showHearts(lives)
             if (lives === 0) {
+                clearInterval(interval)
                 this.cameras.main.fadeOut(500);
                 this.tweens.add({
                     targets: music,
@@ -265,7 +266,8 @@ class Solo extends Phaser.Scene {
         if (points === 64 && increasedSpeed === false) {
             increasedSpeed = true
             clearInterval(interval)
-            interval = setInterval(() => { this.spawnMole() }, spawnSpeed - 1350)
+            spawnSpeed = 750
+            interval = setInterval(() => { this.spawnMole() }, spawnSpeed)
             speedText.setVisible(true)
         } else if (points === 65) {
             increasedSpeed = false

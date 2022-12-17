@@ -56,10 +56,10 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 600,
+        "height": 1050,
         "resizable": true,
         "title": "Wilde Westen Game",
-        "width": 800
+        "width": 1680
       }
     ]
   }
