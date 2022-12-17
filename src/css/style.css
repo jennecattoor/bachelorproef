@@ -1,6 +1,6 @@
 @font-face {
   font-family: Roadstore;
-  src: url('../assets/font/roadstore.woff2');
+  src: url('../font/roadstore.woff2') format('woff2');
 }
 
 html {

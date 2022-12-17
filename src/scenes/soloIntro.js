@@ -10,8 +10,8 @@ class SoloIntro extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('smashorange', './src/assets/images/orange.png');
-        this.load.video('intro', './src/assets/video/intro.mp4');
+        this.load.image('smashorange', './../assets/images/orange.png');
+        this.load.video('intro', './../assets/video/intro.mp4');
     }
 
     create() {

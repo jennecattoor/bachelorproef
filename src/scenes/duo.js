@@ -23,16 +23,16 @@ class Duo extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('background', './src/assets/images/background.jpg');
-        this.load.audio('instructions', './src/assets/audio/instructions.wav');
-        this.load.image('mask-top', './src/assets/images/mask-top.png');
-        this.load.image('mask-bottem', './src/assets/images/mask-bottem.png');
-        this.load.image('mole-red', './src/assets/images/mole-red.png');
-        this.load.image('mole-blue', './src/assets/images/mole-blue.png');
-        this.load.image('hit', './src/assets/images/hit.png');
-        this.load.image('mole-red', './src/assets/images/mole-red.png');
-        this.load.image('mole-blue', './src/assets/images/mole-blue.png');
-        this.load.audio('song-duo', './src/assets/audio/song-duo.mp3');
+        this.load.image('background', './../assets/images/background.jpg');
+        this.load.audio('instructions', './../assets/audio/instructions.wav');
+        this.load.image('mask-top', './../assets/images/mask-top.png');
+        this.load.image('mask-bottem', './../assets/images/mask-bottem.png');
+        this.load.image('mole-red', './../assets/images/mole-red.png');
+        this.load.image('mole-blue', './../assets/images/mole-blue.png');
+        this.load.image('hit', './../assets/images/hit.png');
+        this.load.image('mole-red', './../assets/images/mole-red.png');
+        this.load.image('mole-blue', './../assets/images/mole-blue.png');
+        this.load.audio('song-duo', './../assets/audio/song-duo.mp3');
     }
 
     create() {

@@ -8,10 +8,10 @@ class Menu extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('background-blurred', './src/assets/images/background-blurred.jpg');
-        this.load.image('singleplayer', './src/assets/images/single.png');
-        this.load.image('multiplayer', './src/assets/images/two.png');
-        this.load.audio('background-music', './src/assets/audio/backgroundMusic.mp3');
+        this.load.image('background-blurred', './../assets/images/background-blurred.jpg',);
+        this.load.image('singleplayer', './../assets/images/single.png');
+        this.load.image('multiplayer', './../assets/images/two.png');
+        this.load.audio('background-music', './../assets/audio/backgroundMusic.mp3');
     }
 
     create() {
