@@ -9,7 +9,7 @@ let scoreTextBlue;
 let backgroundSong;
 let scoreRed = 0;
 let scoreBlue = 0;
-let initialTime = 10;
+let initialTime = 75;
 let spawnSpeed = 1500;
 let molesAnimated = [];
 let molesUp = [];
@@ -228,7 +228,7 @@ class Duo extends Phaser.Scene {
                     volume: 0,
                     duration: 500
                 });
-                this.time.delayedCall(600, () => {
+                this.time.delayedCall(800, () => {
                     this.scene.start('duoScore', { scoreRed: scoreRed, scoreBlue: scoreBlue })
                 }, [], this);
                 return

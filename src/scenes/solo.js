@@ -41,7 +41,7 @@ class Solo extends Phaser.Scene {
         background.setScale(scale).setScrollFactor(0)
 
         // Instruction text
-        let instruction = this.add.text(this.cameras.main.width / 2, this.cameras.main.height - 100, `You need to make sure that the moles can't steal the music-solo`, { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '5rem' }).setOrigin(0.5, 0).setScrollFactor(0);
+        let instruction = this.add.text(this.cameras.main.width / 2, this.cameras.main.height - 100, `You need to make sure that the moles can't steal the guitar`, { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '5rem' }).setOrigin(0.5, 0).setScrollFactor(0);
         setTimeout(() => { instruction.setVisible(false) }, 4500);
 
         // Points text
@@ -204,10 +204,10 @@ class Solo extends Phaser.Scene {
                 this.cameras.main.fadeOut(500);
                 this.tweens.add({
                     targets: music,
-                    volume: 0,
-                    duration: 600
+                    volume: 0, 
+                    duration: 500
                 });
-                this.time.delayedCall(700, () => { this.scene.start('soloScore', { points: points }) }, [], this);
+                this.time.delayedCall(800, () => { this.scene.start('soloScore', { points: points }) }, [], this);
             }
         }
     }

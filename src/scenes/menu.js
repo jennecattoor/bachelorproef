@@ -40,18 +40,18 @@ class Menu extends Phaser.Scene {
         this.add.text(this.cameras.main.width / 4 * 2.75, this.cameras.main.height / 1.35, 'Smash Yellow for 2 players', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '3rem' }).setScale(scale).setOrigin(0.5, 0.5).setScrollFactor(0);
 
         // Playing music
-        // let backgroundMusic = this.sound.add('music-menu', { volume: 0.4 });
-        // backgroundMusic.setLoop(true);
-        // backgroundMusic.play()
+        let backgroundMusic = this.sound.add('music-menu', { volume: 0.4 });
+        backgroundMusic.setLoop(true);
+        backgroundMusic.play()
 
         // Listening to key input
         this.input.keyboard.on('keyup', (e) => {
             if (e.key == 'w') {
-                // this.tweens.add({
-                //     targets: backgroundMusic,
-                //     volume: 0,
-                //     duration: 800
-                // });
+                this.tweens.add({
+                    targets: backgroundMusic,
+                    volume: 0,
+                    duration: 600
+                });
                 this.cameras.main.fadeOut(800);
                 this.time.delayedCall(1000, () => {
                     this.scene.remove()
@@ -60,11 +60,11 @@ class Menu extends Phaser.Scene {
                     , [], this);
             }
             if (e.key == 'c') {
-                // this.tweens.add({
-                //     targets: backgroundMusic,
-                //     volume: 0,
-                //     duration: 800
-                // });
+                this.tweens.add({
+                    targets: backgroundMusic,
+                    volume: 0,
+                    duration: 600
+                });
                 this.cameras.main.fadeOut(800);
                 this.time.delayedCall(1000, () => {
                     this.scene.remove()

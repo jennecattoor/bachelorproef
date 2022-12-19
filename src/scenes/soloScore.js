@@ -33,7 +33,7 @@ class SoloScore extends Phaser.Scene {
         this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2 - 75, `You scored ${points} Points`, { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '14rem' }).setScale(scale).setOrigin(0.5, 0.5).setScrollFactor(0);
 
         // Score comment
-        let titleSmall = this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2 + 75, 'Nice try', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '8.6rem' }).setScale(scale).setOrigin(0.5, 0.5).setScrollFactor(0);
+        let titleSmall = this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2 + 75, '', { fontFamily: 'roadstore, Arial', color: '#282828', fontSize: '8.6rem' }).setScale(scale).setOrigin(0.5, 0.5).setScrollFactor(0);
 
         // Score sound and comment
         let one = this.sound.add('one');
@@ -50,7 +50,7 @@ class SoloScore extends Phaser.Scene {
         } else if (points <= 48) {
             three.play();
             titleSmall.setText('Great work');
-        } else if (points <= 60) {
+        } else if (points >= 60) {
             four.play();
             titleSmall.setText('Outstanding');
         }
